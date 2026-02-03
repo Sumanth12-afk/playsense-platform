@@ -222,7 +222,7 @@ const SettingsPage = () => {
       const { data, error } = await supabase.functions.invoke('send-test-email', {
         body: {
           email: user.email,
-          parentName: user.user_metadata?.name || user.email.split('@')[0],
+          parentName: user.displayName || user.email?.split('@')[0] || 'Parent',
         },
       });
 

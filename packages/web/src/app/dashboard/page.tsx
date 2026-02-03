@@ -297,7 +297,7 @@ export default function DashboardPage() {
               thisWeek={lateNightData?.count || 0}
               trend={lateNightData && lateNightData.count > 2 ? 'up' : 'stable'}
               lastSession={
-                lateNightData?.sessions[0]
+                lateNightData?.sessions[0]?.ended_at
                   ? new Date(lateNightData.sessions[0].ended_at).toLocaleDateString('en-US', {
                       weekday: 'long',
                     })

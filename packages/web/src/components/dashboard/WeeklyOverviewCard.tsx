@@ -1,4 +1,4 @@
-import { WeeklyOverview } from '@playsense/shared';
+import { WeeklyOverview } from '@/types/shared';
 import { TrendingUp, Calendar } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
@@ -51,7 +51,7 @@ export default function WeeklyOverviewCard({ weeklyOverview }: Props) {
               formatter={(value: number) => [`${value}h`, 'Gaming Time']}
             />
             <Bar dataKey="hours" radius={[8, 8, 0, 0]}>
-              {weeklyOverview.days.map((entry, index) => (
+              {weeklyOverview.days.map((entry: { hours: number }, index: number) => (
                 <Cell key={`cell-${index}`} fill={getBarColor(entry.hours)} />
               ))}
             </Bar>

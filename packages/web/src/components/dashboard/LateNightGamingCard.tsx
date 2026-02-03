@@ -1,4 +1,4 @@
-import { LateNightGaming } from '@playsense/shared';
+import { LateNightGaming } from '@/types/shared';
 import { Moon, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 interface Props {

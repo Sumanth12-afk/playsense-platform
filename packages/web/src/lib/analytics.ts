@@ -7,8 +7,9 @@ import {
   LateNightGaming,
   GamingSession,
   GameCategory,
-} from '@playsense/shared';
-import { HEALTH_SCORE_THRESHOLDS, LATE_NIGHT_HOUR } from '@playsense/shared';
+  HEALTH_SCORE_THRESHOLDS,
+  LATE_NIGHT_HOUR,
+} from '@/types/shared';
 import { startOfWeek, endOfWeek, eachDayOfInterval, format, subDays } from 'date-fns';
 
 // Calculate Healthy Gaming Score

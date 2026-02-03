@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Activity, Clock, Moon, Gamepad2 } from 'lucide-react';
-import { HealthScore } from '@playsense/shared';
+import { HealthScore } from '@/types/shared';
 
 interface Props {
   healthScore: HealthScore | null;

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/useAuth';
-import { Child } from '@playsense/shared';
+import { Child } from '@/types/shared';
 import {
   LayoutDashboard,
   BarChart3,
