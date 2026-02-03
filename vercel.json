@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build --workspace=packages/shared && npm run build --workspace=packages/web",
+  "buildCommand": "npm run build --workspace=packages/web",
   "installCommand": "npm install",
   "outputDirectory": "packages/web/.next",
   "framework": "nextjs"
