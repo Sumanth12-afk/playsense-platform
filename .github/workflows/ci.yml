@@ -32,10 +32,6 @@ jobs:
       - name: Install web dependencies
         run: npm ci
 
-      - name: Build shared package
-        run: npm run build --workspace=packages/shared
-        working-directory: .
-
       - name: Run ESLint
         run: npm run lint
 
@@ -45,8 +41,8 @@ jobs:
       - name: TypeScript type check
         run: npm run type-check
 
-      - name: Build
-        run: npm run build
+      # Note: Build step removed - Vercel handles production build with env vars
+      # The build requires Firebase/Supabase keys which are only available in Vercel
 
   security:
     name: Security Audit
