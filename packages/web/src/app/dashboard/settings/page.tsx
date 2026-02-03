@@ -21,7 +21,7 @@ import {
   Download,
   Loader2,
   Send,
-  Save,
+  Save
 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
@@ -30,11 +30,7 @@ import { COMPANION_APP_DOWNLOAD_URL } from '@/lib/constants';
 import { toast } from 'sonner';
 
 // Child Device Card with Copy ID functionality
-const ChildDeviceCard = ({
-  child,
-}: {
-  child: { id: string; name: string; last_sync_at: string | null };
-}) => {
+const ChildDeviceCard = ({ child }: { child: { id: string; name: string; last_sync_at: string | null } }) => {
   const [copied, setCopied] = useState(false);
 
   const copyChildId = async () => {
@@ -48,18 +44,14 @@ const ChildDeviceCard = ({
     <div className="rounded-xl border border-border p-4 mb-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div
-            className={cn(
-              'flex h-10 w-10 items-center justify-center rounded-xl',
-              child.last_sync_at ? 'bg-health-green/10' : 'bg-muted'
-            )}
-          >
-            <Monitor
-              className={cn(
-                'h-5 w-5',
-                child.last_sync_at ? 'text-health-green' : 'text-muted-foreground'
-              )}
-            />
+          <div className={cn(
+            "flex h-10 w-10 items-center justify-center rounded-xl",
+            child.last_sync_at ? "bg-health-green/10" : "bg-muted"
+          )}>
+            <Monitor className={cn(
+              "h-5 w-5",
+              child.last_sync_at ? "text-health-green" : "text-muted-foreground"
+            )} />
           </div>
           <div>
             <p className="font-medium text-foreground">{child.name}'s PC</p>
@@ -83,7 +75,12 @@ const ChildDeviceCard = ({
           <code className="flex-1 bg-muted px-3 py-2 rounded-lg text-xs font-mono text-foreground truncate">
             {child.id}
           </code>
-          <Button variant="outline" size="sm" onClick={copyChildId} className="gap-2 shrink-0">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={copyChildId}
+            className="gap-2 shrink-0"
+          >
             {copied ? (
               <>
                 <CheckCheck className="h-4 w-4 text-health-green" />
@@ -203,10 +200,7 @@ const SettingsPage = () => {
     },
   });
 
-  const handlePreferenceChange = (
-    setter: React.Dispatch<React.SetStateAction<any>>,
-    value: any
-  ) => {
+  const handlePreferenceChange = (setter: React.Dispatch<React.SetStateAction<any>>, value: any) => {
     setter(value);
     setHasChanges(true);
   };
@@ -222,7 +216,7 @@ const SettingsPage = () => {
       const { data, error } = await supabase.functions.invoke('send-test-email', {
         body: {
           email: user.email,
-          parentName: (user as any).user_metadata?.name || user.email.split('@')[0],
+          parentName: user.user_metadata?.name || user.email.split('@')[0],
         },
       });
 
@@ -252,24 +246,11 @@ const SettingsPage = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: user.email }),
       });
-      const data = (await res.json().catch(() => ({}))) as {
-        error?: string;
-        emailsSent?: number;
-        message?: string;
-      };
+      const data = await res.json().catch(() => ({})) as { error?: string; emailsSent?: number; message?: string };
       if (!res.ok) throw new Error(data.error || 'Request failed');
-      const sent =
-        data.emailsSent ??
-        (data as { results?: { success?: boolean }[] }).results?.filter(
-          (r: { success?: boolean }) => r.success
-        ).length ??
-        0;
+      const sent = data.emailsSent ?? (data as { results?: { success?: boolean }[] }).results?.filter((r: { success?: boolean }) => r.success).length ?? 0;
       if (sent === 0) {
-        toast.info(
-          data.message ||
-            'No weekly digest was sent. Enable Weekly Digest in Settings and ensure your child has gaming sessions this week.',
-          { duration: 8000 }
-        );
+        toast.info(data.message || 'No weekly digest was sent. Enable Weekly Digest in Settings and ensure your child has gaming sessions this week.', { duration: 8000 });
       } else {
         toast.success(
           `Weekly digest sent to ${user.email}. Check your inbox (and spam) for the real weekly update email.`,
@@ -308,9 +289,16 @@ const SettingsPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-foreground lg:text-3xl">Settings</h1>
-        <p className="mt-2 text-muted-foreground">Manage your preferences and connected devices</p>
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <h1 className="text-2xl font-bold text-foreground lg:text-3xl">
+          Settings
+        </h1>
+        <p className="mt-2 text-muted-foreground">
+          Manage your preferences and connected devices
+        </p>
       </motion.div>
 
       {/* Logged-in account */}
@@ -329,7 +317,9 @@ const SettingsPage = () => {
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
                 Logged in as
               </p>
-              <p className="text-sm font-medium text-foreground">{user.email}</p>
+              <p className="text-sm font-medium text-foreground">
+                {user.email}
+              </p>
             </div>
           </div>
         </motion.div>
@@ -454,22 +444,11 @@ const SettingsPage = () => {
 
                 <p className="text-xs text-muted-foreground">
                   Weekly digest will be sent every{' '}
-                  {
-                    ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][
-                      weeklySendDay
-                    ]
-                  }{' '}
-                  at{' '}
-                  {weeklySendTime === '08:00'
-                    ? '8:00 AM'
-                    : weeklySendTime === '09:00'
-                      ? '9:00 AM'
-                      : weeklySendTime === '10:00'
-                        ? '10:00 AM'
-                        : weeklySendTime === '18:00'
-                          ? '6:00 PM'
-                          : '8:00 PM'}{' '}
-                  ({timezone})
+                  {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][weeklySendDay]}{' '}
+                  at {weeklySendTime === '08:00' ? '8:00 AM' : 
+                      weeklySendTime === '09:00' ? '9:00 AM' : 
+                      weeklySendTime === '10:00' ? '10:00 AM' : 
+                      weeklySendTime === '18:00' ? '6:00 PM' : '8:00 PM'} ({timezone})
                 </p>
                 <div className="pt-3">
                   <Button
@@ -560,14 +539,9 @@ const SettingsPage = () => {
                 📬 <strong>Not seeing emails?</strong>
               </p>
               <ul className="text-xs text-muted-foreground list-disc list-inside space-y-1">
-                <li>
-                  Check <strong>Spam</strong> and <strong>Promotions</strong> tabs.
-                </li>
+                <li>Check <strong>Spam</strong> and <strong>Promotions</strong> tabs.</li>
                 <li>Emails may take a few minutes to arrive.</li>
-                <li>
-                  Add PlaySense to your contacts or safe senders list so future digests land in your
-                  inbox.
-                </li>
+                <li>Add PlaySense to your contacts or safe senders list so future digests land in your inbox.</li>
                 <li>Mark our emails as &quot;Not Spam&quot; to improve future deliverability.</li>
               </ul>
             </div>
@@ -597,7 +571,9 @@ const SettingsPage = () => {
             <div className="h-16 bg-muted rounded-xl" />
           </div>
         ) : children && children.length > 0 ? (
-          children.map((child) => <ChildDeviceCard key={child.id} child={child} />)
+          children.map((child) => (
+            <ChildDeviceCard key={child.id} child={child} />
+          ))
         ) : (
           <p className="text-sm text-muted-foreground text-center py-4">No devices connected yet</p>
         )}
@@ -629,7 +605,9 @@ const SettingsPage = () => {
             <div className="h-16 bg-muted rounded-xl" />
           </div>
         ) : children && children.length > 0 ? (
-          children.map((child) => <ChildManagementCard key={child.id} child={child} />)
+          children.map((child) => (
+            <ChildManagementCard key={child.id} child={child} />
+          ))
         ) : (
           <p className="text-sm text-muted-foreground text-center py-4">No children added yet</p>
         )}
@@ -655,11 +633,15 @@ const SettingsPage = () => {
         </div>
 
         <p className="text-sm text-muted-foreground mb-4">
-          Install the PlaySense Companion app on your child's PC to track gaming activity. The app
-          runs quietly in the background and syncs data automatically.
+          Install the PlaySense Companion app on your child's PC to track gaming activity.
+          The app runs quietly in the background and syncs data automatically.
         </p>
 
-        <Button onClick={handleDownloadCompanion} disabled={isDownloading} className="w-full gap-2">
+        <Button
+          onClick={handleDownloadCompanion}
+          disabled={isDownloading}
+          className="w-full gap-2"
+        >
           {isDownloading ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />

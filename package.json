@@ -9,20 +9,16 @@
   "scripts": {
     "dev:web": "npm run dev --workspace=packages/web",
     "dev:desktop": "npm run dev --workspace=packages/desktop",
-    "build:web": "npm run build --workspace=packages/web",
+    "build:shared": "npm run build --workspace=packages/shared",
+    "build:web": "npm run build:shared && npm run build --workspace=packages/web",
     "build:desktop": "npm run build --workspace=packages/desktop",
-    "build:all": "npm run build:web && npm run build:desktop",
+    "build:all": "npm run build:shared && npm run build --workspace=packages/web && npm run build:desktop",
     "supabase": "supabase",
     "supabase:deploy:functions": "supabase functions deploy send-weekly-digest && supabase functions deploy send-test-email"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^16.1.6",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "^14.2.35",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.1",
     "supabase": "^2.15.0",
     "typescript": "^5.3.3"
   }
 }
+

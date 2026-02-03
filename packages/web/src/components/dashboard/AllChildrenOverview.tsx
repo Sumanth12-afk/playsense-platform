@@ -5,7 +5,15 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Child } from '@/hooks/useChildren';
 import { supabase } from '@/lib/supabase';
-import { Activity, Clock, GamepadIcon, TrendingUp, TrendingDown, Moon, Users } from 'lucide-react';
+import { 
+  Activity, 
+  Clock, 
+  GamepadIcon, 
+  TrendingUp, 
+  TrendingDown, 
+  Moon,
+  Users
+} from 'lucide-react';
 
 interface AllChildrenOverviewProps {
   children: Child[];
@@ -35,7 +43,7 @@ export function AllChildrenOverview({ children, onSelectChild }: AllChildrenOver
     setLoading(true);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
+    
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
     weekAgo.setHours(0, 0, 0, 0);
@@ -60,17 +68,13 @@ export function AllChildrenOverview({ children, onSelectChild }: AllChildrenOver
           .eq('child_id', child.id)
           .gte('started_at', weekAgo.toISOString());
 
-        const weeklyMinutes = (weeklySessions || []).reduce(
-          (sum, s) => sum + s.duration_minutes,
-          0
-        );
+        const weeklyMinutes = (weeklySessions || []).reduce((sum, s) => sum + s.duration_minutes, 0);
 
         // Get top game
         const gameTime: Record<string, number> = {};
         (weeklySessions || []).forEach((session: any) => {
           if (session.game?.name) {
-            gameTime[session.game.name] =
-              (gameTime[session.game.name] || 0) + session.duration_minutes;
+            gameTime[session.game.name] = (gameTime[session.game.name] || 0) + session.duration_minutes;
           }
         });
         const topGameEntry = Object.entries(gameTime).sort((a, b) => b[1] - a[1])[0];
@@ -84,8 +88,8 @@ export function AllChildrenOverview({ children, onSelectChild }: AllChildrenOver
         }).length;
 
         // Get last active
-        const lastSession = (weeklySessions || []).sort(
-          (a: any, b: any) => new Date(b.started_at).getTime() - new Date(a.started_at).getTime()
+        const lastSession = (weeklySessions || []).sort((a: any, b: any) => 
+          new Date(b.started_at).getTime() - new Date(a.started_at).getTime()
         )[0];
         const lastActive = lastSession?.started_at || null;
 
@@ -147,7 +151,7 @@ export function AllChildrenOverview({ children, onSelectChild }: AllChildrenOver
   // Calculate totals
   const totalTodayMinutes = childStats.reduce((sum, s) => sum + s.todayMinutes, 0);
   const totalWeeklyMinutes = childStats.reduce((sum, s) => sum + s.weeklyMinutes, 0);
-  const avgHealthScore = childStats.length
+  const avgHealthScore = childStats.length 
     ? Math.round(childStats.reduce((sum, s) => sum + s.healthScore, 0) / childStats.length)
     : 0;
 
@@ -163,7 +167,10 @@ export function AllChildrenOverview({ children, onSelectChild }: AllChildrenOver
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid gap-4 md:grid-cols-3">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
@@ -212,9 +219,7 @@ export function AllChildrenOverview({ children, onSelectChild }: AllChildrenOver
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Avg Health Score</p>
-                  <p className={`text-2xl font-bold ${getHealthColor(avgHealthScore)}`}>
-                    {avgHealthScore}
-                  </p>
+                  <p className={`text-2xl font-bold ${getHealthColor(avgHealthScore)}`}>{avgHealthScore}</p>
                 </div>
               </div>
             </CardContent>
@@ -250,14 +255,12 @@ export function AllChildrenOverview({ children, onSelectChild }: AllChildrenOver
                     <div>
                       <h3 className="font-semibold text-lg">{stats.childName}</h3>
                       <p className="text-sm text-muted-foreground">
-                        {stats.lastActive
+                        {stats.lastActive 
                           ? `Last active: ${new Date(stats.lastActive).toLocaleDateString()}`
                           : 'No recent activity'}
                       </p>
                     </div>
-                    <div
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${getHealthBg(stats.healthScore)} ${getHealthColor(stats.healthScore)}`}
-                    >
+                    <div className={`px-3 py-1 rounded-full text-sm font-medium ${getHealthBg(stats.healthScore)} ${getHealthColor(stats.healthScore)}`}>
                       {stats.healthScore}
                     </div>
                   </div>
@@ -281,9 +284,7 @@ export function AllChildrenOverview({ children, onSelectChild }: AllChildrenOver
                     <div className="flex items-center gap-2">
                       <Moon className="h-4 w-4 text-muted-foreground" />
                       <span className="text-muted-foreground">Late:</span>
-                      <span
-                        className={`font-medium ${stats.lateNightCount > 2 ? 'text-yellow-500' : ''}`}
-                      >
+                      <span className={`font-medium ${stats.lateNightCount > 2 ? 'text-yellow-500' : ''}`}>
                         {stats.lateNightCount} sessions
                       </span>
                     </div>
@@ -303,7 +304,7 @@ export function AllChildrenOverview({ children, onSelectChild }: AllChildrenOver
       </motion.div>
 
       {/* Quick Alerts */}
-      {childStats.some((s) => s.healthScore < 60 || s.lateNightCount > 3) && (
+      {childStats.some(s => s.healthScore < 60 || s.lateNightCount > 3) && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -318,27 +319,18 @@ export function AllChildrenOverview({ children, onSelectChild }: AllChildrenOver
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {childStats
-                  .filter((s) => s.healthScore < 60)
-                  .map((s) => (
-                    <li key={`health-${s.childId}`} className="flex items-center gap-2 text-sm">
-                      <span className="w-2 h-2 rounded-full bg-yellow-500" />
-                      <span>
-                        {s.childName}'s health score is {s.healthScore} - consider checking their
-                        gaming patterns
-                      </span>
-                    </li>
-                  ))}
-                {childStats
-                  .filter((s) => s.lateNightCount > 3)
-                  .map((s) => (
-                    <li key={`late-${s.childId}`} className="flex items-center gap-2 text-sm">
-                      <span className="w-2 h-2 rounded-full bg-yellow-500" />
-                      <span>
-                        {s.childName} had {s.lateNightCount} late-night gaming sessions this week
-                      </span>
-                    </li>
-                  ))}
+                {childStats.filter(s => s.healthScore < 60).map(s => (
+                  <li key={`health-${s.childId}`} className="flex items-center gap-2 text-sm">
+                    <span className="w-2 h-2 rounded-full bg-yellow-500" />
+                    <span>{s.childName}'s health score is {s.healthScore} - consider checking their gaming patterns</span>
+                  </li>
+                ))}
+                {childStats.filter(s => s.lateNightCount > 3).map(s => (
+                  <li key={`late-${s.childId}`} className="flex items-center gap-2 text-sm">
+                    <span className="w-2 h-2 rounded-full bg-yellow-500" />
+                    <span>{s.childName} had {s.lateNightCount} late-night gaming sessions this week</span>
+                  </li>
+                ))}
               </ul>
             </CardContent>
           </Card>

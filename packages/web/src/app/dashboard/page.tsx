@@ -27,7 +27,7 @@ import {
   useCategoryBreakdown,
   useLateNightSessions,
   useGameDominance,
-  useActiveSession,
+  useActiveSession
 } from '@/hooks/useGamingData';
 import { useConversationTips, transformTipsForCard } from '@/hooks/useConversationTips';
 
@@ -37,10 +37,10 @@ export default function DashboardPage() {
 
   // Check if "All Children" is selected
   const isAllChildrenView = selectedChildId === 'all';
-
+  
   // Auto-select first child if none selected (only if not showing all)
-  const activeChildId = isAllChildrenView ? undefined : selectedChildId || children?.[0]?.id;
-  const activeChild = activeChildId ? children?.find((c) => c.id === activeChildId) : undefined;
+  const activeChildId = isAllChildrenView ? undefined : (selectedChildId || children?.[0]?.id);
+  const activeChild = activeChildId ? children?.find(c => c.id === activeChildId) : undefined;
 
   // Debug logging
   console.log('Dashboard - Children:', children);
@@ -52,7 +52,7 @@ export default function DashboardPage() {
   const { data: categoryBreakdown } = useCategoryBreakdown(activeChildId);
   const { data: lateNightData } = useLateNightSessions(activeChildId);
   const { data: gameDominance } = useGameDominance(activeChildId);
-  const { data: activeSession } = useActiveSession(activeChildId); // REAL-TIME: Currently playing game
+  const { data: activeSession } = useActiveSession(activeChildId);  // REAL-TIME: Currently playing game
   const { data: conversationTips } = useConversationTips();
 
   // Debug logging to help troubleshoot real-time updates
@@ -62,75 +62,69 @@ export default function DashboardPage() {
 
   const conversationGuidance = transformTipsForCard(conversationTips);
 
+
   // Calculate today's games from sessions
-  const todayGames =
-    todayActivity?.reduce(
-      (acc, session) => {
-        const existing = acc.find((g) => g.name === session.game?.name);
-        if (existing) {
-          existing.minutes += session.duration_minutes;
-        } else if (session.game) {
-          acc.push({
-            name: session.game.name,
-            minutes: session.duration_minutes,
-            category: session.game.category,
-          });
-        }
-        return acc;
-      },
-      [] as {
-        name: string;
-        minutes: number;
-        category: 'competitive' | 'creative' | 'casual' | 'social';
-      }[]
-    ) || [];
+  const todayGames = todayActivity?.reduce((acc, session) => {
+    const existing = acc.find(g => g.name === session.game?.name);
+    if (existing) {
+      existing.minutes += session.duration_minutes;
+    } else if (session.game) {
+      acc.push({
+        name: session.game.name,
+        minutes: session.duration_minutes,
+        category: session.game.category,
+      });
+    }
+    return acc;
+  }, [] as { name: string; minutes: number; category: 'competitive' | 'creative' | 'casual' | 'social' }[]) || [];
 
   const totalMinutes = todayGames.reduce((acc, g) => acc + g.minutes, 0);
 
   // Calculate health score based on real data
-  const calculateHealthScore = (): {
-    overall: number;
-    session_length: 'good' | 'watch' | 'needs_attention';
-    break_frequency: 'good' | 'watch' | 'needs_attention';
-    late_night_usage: 'minimal' | 'moderate' | 'concerning';
-    game_variety: 'good' | 'low' | 'very_low';
-  } => {
+  const calculateHealthScore = () => {
     let score = 100;
-    let sessionLength: 'good' | 'watch' | 'needs_attention' = 'good';
-    let breakFrequency: 'good' | 'watch' | 'needs_attention' = 'good';
-    let lateNightUsage: 'minimal' | 'moderate' | 'concerning' = 'minimal';
-    let gameVariety: 'good' | 'low' | 'very_low' = 'good';
+    const factors: {
+      session_length: string;
+      break_frequency: string;
+      late_night_usage: string;
+      game_variety: string;
+    } = {
+      session_length: 'good',
+      break_frequency: 'good',
+      late_night_usage: 'minimal',
+      game_variety: 'good',
+    };
 
     // Late night penalty
     if (lateNightData && lateNightData.count > 0) {
       score -= lateNightData.count * 5;
-      lateNightUsage = lateNightData.count > 3 ? 'concerning' : 'moderate';
+      factors.late_night_usage = lateNightData.count > 3 ? 'frequent' : 'moderate';
     }
 
     // Game dominance penalty
     if (gameDominance?.isDominant) {
       score -= 10;
-      gameVariety = 'low';
+      factors.game_variety = 'low';
     }
 
     // Long sessions penalty
     const avgDailyHours = weeklyStats?.reduce((sum, d) => sum + d.hours, 0) || 0;
     if (avgDailyHours > 28) {
       score -= 15;
-      sessionLength = 'needs_attention';
+      factors.session_length = 'high';
     } else if (avgDailyHours > 21) {
       score -= 8;
-      sessionLength = 'watch';
+      factors.session_length = 'moderate';
     }
 
     score = Math.max(0, Math.min(100, score));
 
     return {
       overall: score,
-      session_length: sessionLength,
-      break_frequency: breakFrequency,
-      late_night_usage: lateNightUsage,
-      game_variety: gameVariety,
+      session_length: factors.session_length,
+      break_frequency: factors.break_frequency,
+      late_night_usage: factors.late_night_usage,
+      game_variety: factors.game_variety,
     };
   };
 
@@ -165,15 +159,11 @@ export default function DashboardPage() {
   const calculateWeekdayWeekend = () => {
     if (!weeklyStats) return { weekdayAvg: 0, weekendAvg: 0, difference: 0 };
 
-    const weekdays = weeklyStats.filter((d) => !['Sat', 'Sun'].includes(d.day));
-    const weekends = weeklyStats.filter((d) => ['Sat', 'Sun'].includes(d.day));
+    const weekdays = weeklyStats.filter(d => !['Sat', 'Sun'].includes(d.day));
+    const weekends = weeklyStats.filter(d => ['Sat', 'Sun'].includes(d.day));
 
-    const weekdayAvg = weekdays.length
-      ? weekdays.reduce((sum, d) => sum + d.hours, 0) / weekdays.length
-      : 0;
-    const weekendAvg = weekends.length
-      ? weekends.reduce((sum, d) => sum + d.hours, 0) / weekends.length
-      : 0;
+    const weekdayAvg = weekdays.length ? weekdays.reduce((sum, d) => sum + d.hours, 0) / weekdays.length : 0;
+    const weekendAvg = weekends.length ? weekends.reduce((sum, d) => sum + d.hours, 0) / weekends.length : 0;
 
     return {
       weekdayAvg: Math.round(weekdayAvg * 10) / 10,
@@ -210,12 +200,14 @@ export default function DashboardPage() {
         className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div>
-          <h1 className="text-2xl font-bold text-foreground lg:text-3xl">{getGreeting()} 👋</h1>
+          <h1 className="text-2xl font-bold text-foreground lg:text-3xl">
+            {getGreeting()} 👋
+          </h1>
           <p className="text-muted-foreground">
-            {isAllChildrenView
-              ? `Overview of all ${children.length} children`
-              : activeChild
-                ? `Here's how ${activeChild.name}'s gaming looks this week`
+            {isAllChildrenView 
+              ? `Overview of all ${children.length} children` 
+              : activeChild 
+                ? `Here's how ${activeChild.name}'s gaming looks this week` 
                 : 'Select a child to view insights'}
           </p>
         </div>
@@ -231,9 +223,9 @@ export default function DashboardPage() {
 
       {/* All Children Overview */}
       {isAllChildrenView && children.length > 0 && (
-        <AllChildrenOverview
-          children={children}
-          onSelectChild={(childId) => setSelectedChildId(childId)}
+        <AllChildrenOverview 
+          children={children} 
+          onSelectChild={(childId) => setSelectedChildId(childId)} 
         />
       )}
 
@@ -249,15 +241,11 @@ export default function DashboardPage() {
             <TodayActivityCard
               games={todayGames}
               totalMinutes={totalMinutes}
-              activeSession={
-                activeSession
-                  ? {
-                      game_name: activeSession.game?.name || 'Unknown Game',
-                      category: activeSession.game?.category || 'casual',
-                      started_at: activeSession.started_at,
-                    }
-                  : null
-              }
+              activeSession={activeSession ? {
+                game_name: activeSession.game?.name || 'Unknown Game',
+                category: activeSession.game?.category || 'casual',
+                started_at: activeSession.started_at
+              } : null}
             />
           </div>
 
@@ -295,13 +283,7 @@ export default function DashboardPage() {
             <LateNightCard
               thisWeek={lateNightData?.count || 0}
               trend={lateNightData && lateNightData.count > 2 ? 'up' : 'stable'}
-              lastSession={
-                lateNightData?.sessions[0]?.ended_at
-                  ? new Date(lateNightData.sessions[0].ended_at).toLocaleDateString('en-US', {
-                      weekday: 'long',
-                    })
-                  : null
-              }
+              lastSession={lateNightData?.sessions[0] ? new Date(lateNightData.sessions[0].ended_at).toLocaleDateString('en-US', { weekday: 'long' }) : null}
             />
             <BurnoutRiskCard risk={calculateBurnoutRisk()} />
             <WeekdayWeekendCard {...calculateWeekdayWeekend()} />
@@ -309,10 +291,10 @@ export default function DashboardPage() {
 
           {/* Session Notes */}
           {activeChildId && activeChild && (
-            <SessionNotesCard
-              childId={activeChildId}
+            <SessionNotesCard 
+              childId={activeChildId} 
               childName={activeChild.name}
-              recentSessions={todayActivity?.map((s) => ({
+              recentSessions={todayActivity?.map(s => ({
                 id: s.id,
                 game: s.game,
                 started_at: s.started_at,

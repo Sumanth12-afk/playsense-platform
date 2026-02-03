@@ -37,8 +37,7 @@ export const useSessionsWithNotes = (childId?: string) => {
       // Fallback to direct query
       const { data, error } = await supabase
         .from('gaming_sessions')
-        .select(
-          `
+        .select(`
           id,
           started_at,
           ended_at,
@@ -46,8 +45,7 @@ export const useSessionsWithNotes = (childId?: string) => {
           parent_note,
           note_added_at,
           game:games(name)
-        `
-        )
+        `)
         .eq('child_id', childId)
         .not('parent_note', 'is', null)
         .order('note_added_at', { ascending: false })

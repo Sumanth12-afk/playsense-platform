@@ -546,3 +546,4 @@ async function getSupabaseForRewards() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inljd2x3YW9scnpyaXlkaGtncndyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NzY5NDc4OSwiZXhwIjoyMDgzMjcwNzg5fQ.rQlBQ1UAm-QKCOSUilyWZKi4HLO8HC5cnSdXvws8tCM';
   return createClient(url, key);
 }
+

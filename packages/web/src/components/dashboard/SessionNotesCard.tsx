@@ -46,7 +46,7 @@ export function SessionNotesCard({ childId, childName, recentSessions }: Session
   const { data: notedSessions, isLoading } = useSessionsWithNotes(childId);
   const addNoteMutation = useAddSessionNote();
   const deleteNoteMutation = useDeleteSessionNote();
-
+  
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingSession, setEditingSession] = useState<SessionWithNote | null>(null);
   const [selectedSession, setSelectedSession] = useState<{
@@ -139,8 +139,7 @@ export function SessionNotesCard({ childId, childName, recentSessions }: Session
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            Add context to gaming sessions - note who was playing together, special occasions, or
-            anything helpful for conversations.
+            Add context to gaming sessions - note who was playing together, special occasions, or anything helpful for conversations.
           </p>
 
           {/* Recent Sessions to Add Notes */}
@@ -160,9 +159,7 @@ export function SessionNotesCard({ childId, childName, recentSessions }: Session
                         <Gamepad2 className="h-4 w-4 text-primary" />
                       </div>
                       <div>
-                        <p className="font-medium text-sm">
-                          {session.game?.name || 'Unknown Game'}
-                        </p>
+                        <p className="font-medium text-sm">{session.game?.name || 'Unknown Game'}</p>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           <Clock className="h-3 w-3" />
                           {formatDuration(session.duration_minutes)}
@@ -174,15 +171,13 @@ export function SessionNotesCard({ childId, childName, recentSessions }: Session
                     <Button
                       variant={session.parent_note ? 'secondary' : 'outline'}
                       size="sm"
-                      onClick={() =>
-                        handleAddNote({
-                          id: session.id,
-                          gameName: session.game?.name || 'Unknown Game',
-                          startedAt: session.started_at,
-                          duration: session.duration_minutes,
-                          existingNote: session.parent_note,
-                        })
-                      }
+                      onClick={() => handleAddNote({
+                        id: session.id,
+                        gameName: session.game?.name || 'Unknown Game',
+                        startedAt: session.started_at,
+                        duration: session.duration_minutes,
+                        existingNote: session.parent_note,
+                      })}
                       className="gap-1"
                     >
                       {session.parent_note ? (
@@ -225,23 +220,20 @@ export function SessionNotesCard({ childId, childName, recentSessions }: Session
                         <div>
                           <p className="font-medium text-sm">{session.game_name}</p>
                           <p className="text-xs text-muted-foreground">
-                            {formatTime(session.started_at)} •{' '}
-                            {formatDuration(session.duration_minutes)}
+                            {formatTime(session.started_at)} • {formatDuration(session.duration_minutes)}
                           </p>
                         </div>
                         <div className="flex items-center gap-1">
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() =>
-                              handleAddNote({
-                                id: session.id,
-                                gameName: session.game_name,
-                                startedAt: session.started_at,
-                                duration: session.duration_minutes,
-                                existingNote: session.parent_note,
-                              })
-                            }
+                            onClick={() => handleAddNote({
+                              id: session.id,
+                              gameName: session.game_name,
+                              startedAt: session.started_at,
+                              duration: session.duration_minutes,
+                              existingNote: session.parent_note,
+                            })}
                             className="h-8 w-8 p-0"
                           >
                             <Edit2 className="h-4 w-4" />
@@ -292,12 +284,10 @@ export function SessionNotesCard({ childId, childName, recentSessions }: Session
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {selectedSession?.gameName
-                ? `Add Note for ${selectedSession.gameName}`
-                : 'Add Session Note'}
+              {selectedSession?.gameName ? `Add Note for ${selectedSession.gameName}` : 'Add Session Note'}
             </DialogTitle>
           </DialogHeader>
-
+          
           {selectedSession && (
             <div className="text-sm text-muted-foreground mb-4">
               <div className="flex items-center gap-2">
@@ -318,8 +308,8 @@ export function SessionNotesCard({ childId, childName, recentSessions }: Session
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
               Cancel
             </Button>
-            <Button
-              onClick={handleSaveNote}
+            <Button 
+              onClick={handleSaveNote} 
               disabled={!noteText.trim() || addNoteMutation.isPending}
             >
               {addNoteMutation.isPending ? (

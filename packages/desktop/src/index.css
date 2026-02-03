@@ -113,7 +113,9 @@
     opacity: 1;
     transform: scale(1);
   }
-}@keyframes pulse-slow {
+}
+
+@keyframes pulse-slow {
   0%, 100% {
     opacity: 1;
   }
@@ -133,3 +135,4 @@
 .animate-pulse-slow {
   animation: pulse-slow 3s ease-in-out infinite;
 }
+

@@ -1,0 +1,8 @@
+# Compiled output (tsconfig outputs to dist/)
+*.js
+*.js.map
+*.d.ts
+*.d.ts.map
+
+# But keep dist in case it's needed
+!dist/**/*

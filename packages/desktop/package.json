@@ -96,11 +96,6 @@
       ],
       "icon": "assets/icons/icon.png",
       "category": "Utility"
-    },
-    "publish": {
-      "provider": "generic",
-      "url": "https://playsense-co-in-downloads.s3.us-east-1.amazonaws.com/playsense-app",
-      "channel": "latest"
     }
   }
 }
