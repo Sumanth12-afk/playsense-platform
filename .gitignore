@@ -10,15 +10,19 @@ yarn-error.log*
 .env.local
 .env.*.local
 *.env
+ENV*.txt
 
 # Build outputs
 dist/
+dist-electron/
 build/
 out/
 .next/
+release/
 *.exe
 *.dmg
 *.AppImage
+*.asar
 
 # Database
 *.sqlite

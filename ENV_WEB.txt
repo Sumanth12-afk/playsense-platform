@@ -1,5 +1,0 @@
-# Copy this entire file content to: packages/web/.env.local
-
-NEXT_PUBLIC_SUPABASE_URL=https://ycwlwaolrzriydhkgrwr.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inljd2x3YW9scnpyaXlkaGtncndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc2OTQ3ODksImV4cCI6MjA4MzI3MDc4OX0.6LwHIp8i6sNYXrTDd9boK9QX3qX4vgkUMX7R-XUdUqY
-

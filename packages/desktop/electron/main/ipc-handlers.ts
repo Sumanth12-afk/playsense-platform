@@ -105,10 +105,13 @@ export function registerIpcHandlers() {
       // This handles both first setup AND switching to a new child
       try {
         const { createClient } = await import('@supabase/supabase-js');
-        const supabase = createClient(
-          process.env.VITE_SUPABASE_URL || 'https://ycwlwaolrzriydhkgrwr.supabase.co',
-          process.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inljd2x3YW9scnpyaXlkaGtncndyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NzY5NDc4OSwiZXhwIjoyMDgzMjcwNzg5fQ.rQlBQ1UAm-QKCOSUilyWZKi4HLO8HC5cnSdXvws8tCM'
-        );
+        const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+        if (!supabaseUrl || !supabaseKey) {
+          logger.warn('Supabase not configured, skipping welcome bonus check');
+          return true;
+        }
+        const supabase = createClient(supabaseUrl, supabaseKey);
 
         // Check if this child already has any points transactions
         const { data: existingPoints, error: checkError } = await supabase
@@ -543,7 +546,12 @@ async function getChildId(): Promise<string | null> {
 async function getSupabaseForRewards() {
   const { createClient } = await import('@supabase/supabase-js');
   const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://ycwlwaolrzriydhkgrwr.supabase.co';
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inljd2x3YW9scnpyaXlkaGtncndyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NzY5NDc4OSwiZXhwIjoyMDgzMjcwNzg5fQ.rQlBQ1UAm-QKCOSUilyWZKi4HLO8HC5cnSdXvws8tCM';
+  // Use service role key from env, fall back to anon key from env
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  if (!key) {
+    logger.error('No Supabase key configured - set SUPABASE_SERVICE_ROLE_KEY or VITE_SUPABASE_ANON_KEY');
+    throw new Error('Supabase key not configured');
+  }
   return createClient(url, key);
 }
 

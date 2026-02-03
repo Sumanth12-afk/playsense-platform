@@ -12,8 +12,8 @@ interface SupabaseGame {
 }
 
 class GamesSyncService {
-  private readonly apiUrl = 'https://ulhgpivzpnsjgggejsre.supabase.co';
-  private readonly apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsaGdwaXZ6cG5zamdnZ2Vqc3JlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU0NDE1MjUsImV4cCI6MjA1MTAxNzUyNX0.xU8FEKiyCYATbwjxsRAUZ39ojcqJpLOb8P0B8QzXDPQ';
+  private readonly apiUrl = process.env.GAMES_DB_URL || process.env.SUPABASE_URL || 'https://ycwlwaolrzriydhkgrwr.supabase.co';
+  private readonly apiKey = process.env.GAMES_DB_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
   private syncInterval: NodeJS.Timeout | null = null;
 
   /**
