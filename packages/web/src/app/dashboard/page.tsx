@@ -88,50 +88,49 @@ export default function DashboardPage() {
   const totalMinutes = todayGames.reduce((acc, g) => acc + g.minutes, 0);
 
   // Calculate health score based on real data
-  const calculateHealthScore = () => {
+  const calculateHealthScore = (): {
+    overall: number;
+    session_length: 'good' | 'watch' | 'needs_attention';
+    break_frequency: 'good' | 'watch' | 'needs_attention';
+    late_night_usage: 'minimal' | 'moderate' | 'concerning';
+    game_variety: 'good' | 'low' | 'very_low';
+  } => {
     let score = 100;
-    const factors: {
-      session_length: string;
-      break_frequency: string;
-      late_night_usage: string;
-      game_variety: string;
-    } = {
-      session_length: 'good',
-      break_frequency: 'good',
-      late_night_usage: 'minimal',
-      game_variety: 'good',
-    };
+    let session_length: 'good' | 'watch' | 'needs_attention' = 'good';
+    let break_frequency: 'good' | 'watch' | 'needs_attention' = 'good';
+    let late_night_usage: 'minimal' | 'moderate' | 'concerning' = 'minimal';
+    let game_variety: 'good' | 'low' | 'very_low' = 'good';
 
     // Late night penalty
     if (lateNightData && lateNightData.count > 0) {
       score -= lateNightData.count * 5;
-      factors.late_night_usage = lateNightData.count > 3 ? 'frequent' : 'moderate';
+      late_night_usage = lateNightData.count > 3 ? 'concerning' : 'moderate';
     }
 
     // Game dominance penalty
     if (gameDominance?.isDominant) {
       score -= 10;
-      factors.game_variety = 'low';
+      game_variety = 'low';
     }
 
     // Long sessions penalty
     const avgDailyHours = weeklyStats?.reduce((sum, d) => sum + d.hours, 0) || 0;
     if (avgDailyHours > 28) {
       score -= 15;
-      factors.session_length = 'high';
+      session_length = 'needs_attention';
     } else if (avgDailyHours > 21) {
       score -= 8;
-      factors.session_length = 'moderate';
+      session_length = 'watch';
     }
 
     score = Math.max(0, Math.min(100, score));
 
     return {
       overall: score,
-      session_length: factors.session_length,
-      break_frequency: factors.break_frequency,
-      late_night_usage: factors.late_night_usage,
-      game_variety: factors.game_variety,
+      session_length,
+      break_frequency,
+      late_night_usage,
+      game_variety,
     };
   };
 
