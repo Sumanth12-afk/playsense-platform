@@ -1,0 +1,16 @@
+{
+    "extends": "next/core-web-vitals",
+    "rules": {
+        "no-eval": "error",
+        "no-implied-eval": "error",
+        "no-new-func": "error",
+        "react/no-unescaped-entities": "off",
+        "react/no-children-prop": "off"
+    },
+    "ignorePatterns": [
+        "node_modules/",
+        ".next/",
+        "out/",
+        "dist/"
+    ]
+}

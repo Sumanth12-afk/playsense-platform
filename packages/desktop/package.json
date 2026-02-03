@@ -1,0 +1,106 @@
+{
+  "name": "playsense-companion",
+  "version": "1.0.0",
+  "description": "PlaySense Desktop Companion - Parental Gaming Monitor",
+  "main": "dist-electron/main/index.js",
+  "author": "PlaySense",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "dev:electron": "npm run build:electron && cross-env NODE_ENV=development electron .",
+    "build": "tsc && vite build",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "build:all": "npm run build && npm run build:electron",
+    "build:mac": "npm run build:all && electron-builder --mac",
+    "build:win": "npm run build:all && electron-builder --win",
+    "build:linux": "npm run build:all && electron-builder --linux",
+    "release": "npm run build:all && electron-builder --publish always",
+    "preview": "vite preview",
+    "postinstall": "electron-rebuild -f -w better-sqlite3"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "better-sqlite3": "^9.2.2",
+    "clsx": "^2.1.0",
+    "electron-updater": "^6.1.7",
+    "framer-motion": "^10.18.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^2.2.0",
+    "winston": "^3.11.0",
+    "zustand": "^4.4.7"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.8",
+    "@types/node": "^20.10.6",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.16",
+    "cross-env": "^10.1.0",
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
+    "electron-rebuild": "^3.2.9",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10",
+    "vite-plugin-electron": "^0.28.1"
+  },
+  "build": {
+    "appId": "com.playsense.companion",
+    "productName": "PlaySense Companion",
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "assets/**/*"
+    ],
+    "directories": {
+      "output": "release",
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icons/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": false,
+      "createStartMenuShortcut": true,
+      "shortcutName": "PlaySense Companion",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "include": "installer.nsh"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "assets/icons/icon.png",
+      "category": "public.app-category.utilities"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "icon": "assets/icons/icon.png",
+      "category": "Utility"
+    },
+    "publish": {
+      "provider": "generic",
+      "url": "https://playsense-co-in-downloads.s3.us-east-1.amazonaws.com/playsense-app",
+      "channel": "latest"
+    }
+  }
+}

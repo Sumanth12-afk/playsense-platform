@@ -1,0 +1,42 @@
+directories:
+  output: release
+  buildResources: assets
+appId: com.playsense.companion
+productName: PlaySense Companion
+files:
+  - filter:
+      - dist/**/*
+      - dist-electron/**/*
+      - assets/**/*
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: assets/icons/icon.png
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: false
+  createStartMenuShortcut: true
+  shortcutName: PlaySense Companion
+  runAfterFinish: true
+  deleteAppDataOnUninstall: false
+  perMachine: true
+  allowElevation: true
+  include: installer.nsh
+mac:
+  target:
+    - dmg
+  icon: assets/icons/icon.png
+  category: public.app-category.utilities
+linux:
+  target:
+    - AppImage
+  icon: assets/icons/icon.png
+  category: Utility
+publish:
+  provider: generic
+  url: https://playsense-releases.s3.ap-south-1.amazonaws.com/desktop
+  channel: latest
+electronVersion: 28.1.0

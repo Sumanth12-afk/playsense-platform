@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light Mode */
+    --background: 240 4% 95%;
+    --foreground: 240 5% 10%;
+    --card: 0 0% 98%;
+    --card-foreground: 240 5% 10%;
+    --primary: 333 71% 50%;
+    --primary-foreground: 327 73% 97%;
+    --secondary: 240 5% 33%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 4% 83%;
+    --muted-foreground: 240 5% 10%;
+    --accent: 355 100% 97%;
+    --accent-foreground: 349 89% 60%;
+    --border: 240 4% 83%;
+    --destructive: 0 72% 50%;
+
+    /* Health Status */
+    --health-green: 145 55% 45%;
+    --health-green-bg: 145 55% 94%;
+    --health-yellow: 45 90% 50%;
+    --health-yellow-bg: 45 90% 94%;
+    --health-red: 0 65% 55%;
+    --health-red-bg: 0 65% 95%;
+
+    /* Game Categories */
+    --category-competitive: 0 70% 60%;
+    --category-creative: 280 60% 60%;
+    --category-casual: 200 70% 55%;
+    --category-social: 145 55% 50%;
+  }
+
+  .dark {
+    --background: 240 5% 10%;
+    --foreground: 0 0% 98%;
+    --card: 240 3% 15%;
+    --card-foreground: 0 0% 98%;
+    --primary: 328 85% 70%;
+    --primary-foreground: 336 83% 17%;
+    --secondary: 240 5% 33%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 5% 25%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 328 85% 25%;
+    --accent-foreground: 328 85% 95%;
+    --border: 240 5% 33%;
+    --destructive: 0 72% 50%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Poppins', system-ui, sans-serif;
+  }
+}
+
+.drag-region {
+  -webkit-app-region: drag;
+}
+
+.drag-region button {
+  -webkit-app-region: no-drag;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+

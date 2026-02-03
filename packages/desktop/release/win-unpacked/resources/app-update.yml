@@ -1,0 +1,4 @@
+provider: generic
+url: https://playsense-releases.s3.ap-south-1.amazonaws.com/desktop
+channel: latest
+updaterCacheDirName: playsense-companion-updater
