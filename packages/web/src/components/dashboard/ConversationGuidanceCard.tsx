@@ -13,7 +13,10 @@ interface ConversationGuidanceCardProps {
   compact?: boolean;
 }
 
-export const ConversationGuidanceCard = ({ tips, compact = false }: ConversationGuidanceCardProps) => {
+export const ConversationGuidanceCard = ({
+  tips,
+  compact = false,
+}: ConversationGuidanceCardProps) => {
   const displayTips = compact ? tips.slice(0, 2) : tips;
 
   return (
@@ -53,7 +56,9 @@ export const ConversationGuidanceCard = ({ tips, compact = false }: Conversation
                   <CheckCircle className="h-3 w-3 text-health-green" />
                 </div>
                 <div>
-                  <span className="text-xs font-medium text-health-green uppercase tracking-wide">Try saying</span>
+                  <span className="text-xs font-medium text-health-green uppercase tracking-wide">
+                    Try saying
+                  </span>
                   <p className="mt-0.5 text-sm text-foreground italic">"{tip.whatToSay}"</p>
                 </div>
               </div>
@@ -63,7 +68,9 @@ export const ConversationGuidanceCard = ({ tips, compact = false }: Conversation
                   <XCircle className="h-3 w-3 text-health-red" />
                 </div>
                 <div>
-                  <span className="text-xs font-medium text-health-red uppercase tracking-wide">Avoid saying</span>
+                  <span className="text-xs font-medium text-health-red uppercase tracking-wide">
+                    Avoid saying
+                  </span>
                   <p className="mt-0.5 text-sm text-foreground italic">"{tip.whatNotToSay}"</p>
                 </div>
               </div>
@@ -78,4 +85,3 @@ export const ConversationGuidanceCard = ({ tips, compact = false }: Conversation
     </motion.div>
   );
 };
-

@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import { 
+import { useEffect, useState } from 'react';
+import {
   User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
   onAuthStateChanged,
   GoogleAuthProvider,
-  signInWithPopup
-} from "firebase/auth";
-import { auth } from "@/lib/firebase";
-import { supabase } from "@/lib/supabase";
+  signInWithPopup,
+} from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import { supabase } from '@/lib/supabase';
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -19,12 +19,12 @@ export const useAuth = () => {
     // Listen to Firebase auth state changes
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
-      
+
       // If user is logged in, ensure they have a record in Supabase
       if (firebaseUser) {
         await ensureUserInSupabase(firebaseUser);
       }
-      
+
       setLoading(false);
     });
 
@@ -75,13 +75,13 @@ export const useAuth = () => {
     await firebaseSignOut(auth);
   };
 
-  return { 
-    user, 
-    loading, 
+  return {
+    user,
+    loading,
     signUp,
     signIn,
     signInWithGoogle,
     signOut,
-    session: user ? { user } : null
+    session: user ? { user } : null,
   };
 };

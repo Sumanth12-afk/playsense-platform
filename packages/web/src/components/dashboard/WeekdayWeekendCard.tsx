@@ -8,7 +8,11 @@ interface WeekdayWeekendCardProps {
   difference: number;
 }
 
-export const WeekdayWeekendCard = ({ weekdayAvg, weekendAvg, difference }: WeekdayWeekendCardProps) => {
+export const WeekdayWeekendCard = ({
+  weekdayAvg,
+  weekendAvg,
+  difference,
+}: WeekdayWeekendCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -36,7 +40,9 @@ export const WeekdayWeekendCard = ({ weekdayAvg, weekendAvg, difference }: Weekd
           <div className="h-4 rounded-full bg-muted overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
-              animate={{ width: `${Math.min((weekdayAvg / Math.max(weekdayAvg, weekendAvg)) * 100, 100)}%` }}
+              animate={{
+                width: `${Math.min((weekdayAvg / Math.max(weekdayAvg, weekendAvg)) * 100, 100)}%`,
+              }}
               transition={{ delay: 0.6, duration: 0.5 }}
               className="h-full rounded-full bg-primary"
             />
@@ -52,7 +58,9 @@ export const WeekdayWeekendCard = ({ weekdayAvg, weekendAvg, difference }: Weekd
           <div className="h-4 rounded-full bg-muted overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
-              animate={{ width: `${Math.min((weekendAvg / Math.max(weekdayAvg, weekendAvg)) * 100, 100)}%` }}
+              animate={{
+                width: `${Math.min((weekendAvg / Math.max(weekdayAvg, weekendAvg)) * 100, 100)}%`,
+              }}
               transition={{ delay: 0.7, duration: 0.5 }}
               className="h-full rounded-full bg-accent"
             />
@@ -71,28 +79,30 @@ export const WeekdayWeekendCard = ({ weekdayAvg, weekendAvg, difference }: Weekd
           <span className="text-sm text-muted-foreground">Weekend</span>
           <p className="text-lg font-semibold text-foreground">{weekendAvg.toFixed(1)}h</p>
         </div>
-        <div className={cn(
-          'rounded-full px-3 py-1',
-          difference > 1 ? 'bg-health-yellow-bg' : 'bg-health-green-bg'
-        )}>
-          <span className={cn(
-            'text-sm font-semibold',
-            difference > 1 ? 'text-health-yellow' : 'text-health-green'
-          )}>
+        <div
+          className={cn(
+            'rounded-full px-3 py-1',
+            difference > 1 ? 'bg-health-yellow-bg' : 'bg-health-green-bg'
+          )}
+        >
+          <span
+            className={cn(
+              'text-sm font-semibold',
+              difference > 1 ? 'text-health-yellow' : 'text-health-green'
+            )}
+          >
             +{Math.round(weekdayAvg > 0 ? (difference / weekdayAvg) * 100 : 0)}%
           </span>
         </div>
       </div>
 
       <p className="mt-4 text-sm text-muted-foreground">
-        {difference > 2 
+        {difference > 2
           ? 'Weekend gaming is significantly higher than weekdays. This is common, but large spikes may indicate catching up on gaming time.'
           : difference > 1
-          ? 'Moderate increase on weekends, which is typical for most families.'
-          : 'Gaming time is fairly consistent throughout the week.'
-        }
+            ? 'Moderate increase on weekends, which is typical for most families.'
+            : 'Gaming time is fairly consistent throughout the week.'}
       </p>
     </motion.div>
   );
 };
-

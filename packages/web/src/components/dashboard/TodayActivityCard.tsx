@@ -17,9 +17,8 @@ interface ActiveSession {
 interface TodayActivityCardProps {
   games: Game[];
   totalMinutes: number;
-  activeSession?: ActiveSession | null;  // Currently playing game
+  activeSession?: ActiveSession | null; // Currently playing game
 }
-
 
 const categoryColors = {
   competitive: 'bg-category-competitive',
@@ -35,12 +34,14 @@ const categoryLabels = {
   social: 'Social',
 };
 
-export const TodayActivityCard = ({ games, totalMinutes, activeSession }: TodayActivityCardProps) => {
+export const TodayActivityCard = ({
+  games,
+  totalMinutes,
+  activeSession,
+}: TodayActivityCardProps) => {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
-  const timeDisplay = hours > 0
-    ? `${hours}h ${minutes}m`
-    : `${minutes}m`;
+  const timeDisplay = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
 
   // Calculate active session duration
   const getActiveSessionDuration = () => {
@@ -111,7 +112,6 @@ export const TodayActivityCard = ({ games, totalMinutes, activeSession }: TodayA
             <p className="mt-3 text-sm text-muted-foreground">No gaming activity yet today</p>
           </div>
         ) : (
-
           games.map((game, index) => (
             <motion.div
               key={game.name}

@@ -1,5 +1,11 @@
 import { Child } from '@/hooks/useChildren';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { User, Users } from 'lucide-react';
 
 interface ChildSelectorProps {
@@ -9,18 +15,19 @@ interface ChildSelectorProps {
   showAllOption?: boolean;
 }
 
-export const ChildSelector = ({ children, selectedId, onSelect, showAllOption = true }: ChildSelectorProps) => {
+export const ChildSelector = ({
+  children,
+  selectedId,
+  onSelect,
+  showAllOption = true,
+}: ChildSelectorProps) => {
   const isAllSelected = selectedId === 'all';
-  
+
   return (
     <Select value={selectedId} onValueChange={onSelect}>
       <SelectTrigger className="w-[200px]">
         <div className="flex items-center gap-2">
-          {isAllSelected ? (
-            <Users className="h-4 w-4" />
-          ) : (
-            <User className="h-4 w-4" />
-          )}
+          {isAllSelected ? <Users className="h-4 w-4" /> : <User className="h-4 w-4" />}
           <SelectValue placeholder="Select child" />
         </div>
       </SelectTrigger>
@@ -42,4 +49,3 @@ export const ChildSelector = ({ children, selectedId, onSelect, showAllOption = 
     </Select>
   );
 };
-

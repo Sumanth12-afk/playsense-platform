@@ -67,7 +67,7 @@ export const LateNightCard = ({ thisWeek, trend, lastSession }: LateNightCardPro
           <span className="text-3xl font-bold text-foreground">{thisWeek}</span>
           <p className="mt-1 text-xs text-muted-foreground">Sessions this week</p>
         </div>
-        
+
         <div className={cn('rounded-lg p-4 text-center', config.bgClassName)}>
           <div className="flex items-center justify-center gap-1">
             <TrendIcon className={cn('h-5 w-5', config.className)} />
@@ -90,4 +90,3 @@ export const LateNightCard = ({ thisWeek, trend, lastSession }: LateNightCardPro
     </motion.div>
   );
 };
-

@@ -13,35 +13,34 @@ const GuidancePage = () => {
     {
       icon: Heart,
       title: 'Lead with Curiosity',
-      description: 'Ask open-ended questions about what they enjoy, rather than interrogating about time spent.',
+      description:
+        'Ask open-ended questions about what they enjoy, rather than interrogating about time spent.',
     },
     {
       icon: Shield,
       title: 'Avoid Shame',
-      description: 'Gaming is a normal hobby. Frame concerns around health and balance, not addiction or weakness.',
+      description:
+        'Gaming is a normal hobby. Frame concerns around health and balance, not addiction or weakness.',
     },
     {
       icon: MessageSquare,
       title: 'Listen First',
-      description: 'Understand their perspective before sharing your concerns. They may have valid reasons for their patterns.',
+      description:
+        'Understand their perspective before sharing your concerns. They may have valid reasons for their patterns.',
     },
     {
       icon: Users,
       title: 'Partner Together',
-      description: 'Work with your child to set boundaries they agree with, rather than imposing rules unilaterally.',
+      description:
+        'Work with your child to set boundaries they agree with, rather than imposing rules unilaterally.',
     },
   ];
 
   return (
     <div className="space-y-8">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <h1 className="text-2xl font-bold text-foreground lg:text-3xl">
-          Conversation Guidance
-        </h1>
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+        <h1 className="text-2xl font-bold text-foreground lg:text-3xl">Conversation Guidance</h1>
         <p className="mt-2 text-muted-foreground">
           Research-backed tips for having supportive conversations about gaming
         </p>
@@ -99,7 +98,8 @@ const GuidancePage = () => {
           className="rounded-2xl bg-card p-6 shadow-card text-center"
         >
           <p className="text-muted-foreground">
-            No personalized tips available yet. Tips will appear here based on your child&apos;s gaming patterns.
+            No personalized tips available yet. Tips will appear here based on your child&apos;s
+            gaming patterns.
           </p>
         </motion.div>
       )}
@@ -113,14 +113,14 @@ const GuidancePage = () => {
       >
         <h2 className="text-lg font-semibold text-foreground">Remember</h2>
         <p className="mt-2 text-muted-foreground">
-          Gaming is a normal part of childhood today. Most children who play video games
-          do not develop problems. The goal isn&apos;t to eliminate gaming, but to help your
-          child develop a healthy relationship with it—just like we help them develop
-          healthy relationships with food, exercise, and other activities.
+          Gaming is a normal part of childhood today. Most children who play video games do not
+          develop problems. The goal isn&apos;t to eliminate gaming, but to help your child develop
+          a healthy relationship with it—just like we help them develop healthy relationships with
+          food, exercise, and other activities.
         </p>
         <p className="mt-3 text-sm text-primary font-medium">
-          When you show genuine interest in what your child enjoys, it opens doors for
-          meaningful conversations about balance and wellbeing.
+          When you show genuine interest in what your child enjoys, it opens doors for meaningful
+          conversations about balance and wellbeing.
         </p>
       </motion.div>
     </div>

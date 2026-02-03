@@ -37,19 +37,16 @@ export default function WeeklyOverviewCard({ weeklyOverview }: Props) {
       <div className="h-64 mb-6">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={weeklyOverview.days}>
-            <XAxis 
-              dataKey="day_name" 
-              tick={{ fill: '#6b7280', fontSize: 12 }}
-            />
-            <YAxis 
+            <XAxis dataKey="day_name" tick={{ fill: '#6b7280', fontSize: 12 }} />
+            <YAxis
               tick={{ fill: '#6b7280', fontSize: 12 }}
               label={{ value: 'Hours', angle: -90, position: 'insideLeft', fill: '#6b7280' }}
             />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: '#fff', 
-                border: '1px solid #e5e7eb', 
-                borderRadius: '8px' 
+            <Tooltip
+              contentStyle={{
+                backgroundColor: '#fff',
+                border: '1px solid #e5e7eb',
+                borderRadius: '8px',
               }}
               formatter={(value: number) => [`${value}h`, 'Gaming Time']}
             />
@@ -65,15 +62,11 @@ export default function WeeklyOverviewCard({ weeklyOverview }: Props) {
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div className="p-4 bg-blue-50 rounded-lg">
           <p className="text-sm text-blue-700 font-medium">Weekday Average</p>
-          <p className="text-2xl font-bold text-blue-900 mt-1">
-            {weeklyOverview.weekday_avg}h
-          </p>
+          <p className="text-2xl font-bold text-blue-900 mt-1">{weeklyOverview.weekday_avg}h</p>
         </div>
         <div className="p-4 bg-purple-50 rounded-lg">
           <p className="text-sm text-purple-700 font-medium">Weekend Average</p>
-          <p className="text-2xl font-bold text-purple-900 mt-1">
-            {weeklyOverview.weekend_avg}h
-          </p>
+          <p className="text-2xl font-bold text-purple-900 mt-1">{weeklyOverview.weekend_avg}h</p>
         </div>
       </div>
 
@@ -85,4 +78,3 @@ export default function WeeklyOverviewCard({ weeklyOverview }: Props) {
     </div>
   );
 }
-

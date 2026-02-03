@@ -27,7 +27,7 @@ import {
   useCategoryBreakdown,
   useLateNightSessions,
   useGameDominance,
-  useActiveSession
+  useActiveSession,
 } from '@/hooks/useGamingData';
 import { useConversationTips, transformTipsForCard } from '@/hooks/useConversationTips';
 
@@ -39,8 +39,8 @@ export default function DashboardPage() {
   const isAllChildrenView = selectedChildId === 'all';
 
   // Auto-select first child if none selected (only if not showing all)
-  const activeChildId = isAllChildrenView ? undefined : (selectedChildId || children?.[0]?.id);
-  const activeChild = activeChildId ? children?.find(c => c.id === activeChildId) : undefined;
+  const activeChildId = isAllChildrenView ? undefined : selectedChildId || children?.[0]?.id;
+  const activeChild = activeChildId ? children?.find((c) => c.id === activeChildId) : undefined;
 
   // Debug logging
   console.log('Dashboard - Children:', children);
@@ -52,7 +52,7 @@ export default function DashboardPage() {
   const { data: categoryBreakdown } = useCategoryBreakdown(activeChildId);
   const { data: lateNightData } = useLateNightSessions(activeChildId);
   const { data: gameDominance } = useGameDominance(activeChildId);
-  const { data: activeSession } = useActiveSession(activeChildId);  // REAL-TIME: Currently playing game
+  const { data: activeSession } = useActiveSession(activeChildId); // REAL-TIME: Currently playing game
   const { data: conversationTips } = useConversationTips();
 
   // Debug logging to help troubleshoot real-time updates
@@ -62,21 +62,28 @@ export default function DashboardPage() {
 
   const conversationGuidance = transformTipsForCard(conversationTips);
 
-
   // Calculate today's games from sessions
-  const todayGames = todayActivity?.reduce((acc, session) => {
-    const existing = acc.find(g => g.name === session.game?.name);
-    if (existing) {
-      existing.minutes += session.duration_minutes;
-    } else if (session.game) {
-      acc.push({
-        name: session.game.name,
-        minutes: session.duration_minutes,
-        category: session.game.category,
-      });
-    }
-    return acc;
-  }, [] as { name: string; minutes: number; category: 'competitive' | 'creative' | 'casual' | 'social' }[]) || [];
+  const todayGames =
+    todayActivity?.reduce(
+      (acc, session) => {
+        const existing = acc.find((g) => g.name === session.game?.name);
+        if (existing) {
+          existing.minutes += session.duration_minutes;
+        } else if (session.game) {
+          acc.push({
+            name: session.game.name,
+            minutes: session.duration_minutes,
+            category: session.game.category,
+          });
+        }
+        return acc;
+      },
+      [] as {
+        name: string;
+        minutes: number;
+        category: 'competitive' | 'creative' | 'casual' | 'social';
+      }[]
+    ) || [];
 
   const totalMinutes = todayGames.reduce((acc, g) => acc + g.minutes, 0);
 
@@ -158,11 +165,15 @@ export default function DashboardPage() {
   const calculateWeekdayWeekend = () => {
     if (!weeklyStats) return { weekdayAvg: 0, weekendAvg: 0, difference: 0 };
 
-    const weekdays = weeklyStats.filter(d => !['Sat', 'Sun'].includes(d.day));
-    const weekends = weeklyStats.filter(d => ['Sat', 'Sun'].includes(d.day));
+    const weekdays = weeklyStats.filter((d) => !['Sat', 'Sun'].includes(d.day));
+    const weekends = weeklyStats.filter((d) => ['Sat', 'Sun'].includes(d.day));
 
-    const weekdayAvg = weekdays.length ? weekdays.reduce((sum, d) => sum + d.hours, 0) / weekdays.length : 0;
-    const weekendAvg = weekends.length ? weekends.reduce((sum, d) => sum + d.hours, 0) / weekends.length : 0;
+    const weekdayAvg = weekdays.length
+      ? weekdays.reduce((sum, d) => sum + d.hours, 0) / weekdays.length
+      : 0;
+    const weekendAvg = weekends.length
+      ? weekends.reduce((sum, d) => sum + d.hours, 0) / weekends.length
+      : 0;
 
     return {
       weekdayAvg: Math.round(weekdayAvg * 10) / 10,
@@ -199,9 +210,7 @@ export default function DashboardPage() {
         className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div>
-          <h1 className="text-2xl font-bold text-foreground lg:text-3xl">
-            {getGreeting()} 👋
-          </h1>
+          <h1 className="text-2xl font-bold text-foreground lg:text-3xl">{getGreeting()} 👋</h1>
           <p className="text-muted-foreground">
             {isAllChildrenView
               ? `Overview of all ${children.length} children`
@@ -240,11 +249,15 @@ export default function DashboardPage() {
             <TodayActivityCard
               games={todayGames}
               totalMinutes={totalMinutes}
-              activeSession={activeSession ? {
-                game_name: activeSession.game?.name || 'Unknown Game',
-                category: activeSession.game?.category || 'casual',
-                started_at: activeSession.started_at
-              } : null}
+              activeSession={
+                activeSession
+                  ? {
+                      game_name: activeSession.game?.name || 'Unknown Game',
+                      category: activeSession.game?.category || 'casual',
+                      started_at: activeSession.started_at,
+                    }
+                  : null
+              }
             />
           </div>
 
@@ -282,7 +295,13 @@ export default function DashboardPage() {
             <LateNightCard
               thisWeek={lateNightData?.count || 0}
               trend={lateNightData && lateNightData.count > 2 ? 'up' : 'stable'}
-              lastSession={lateNightData?.sessions[0]?.ended_at ? new Date(lateNightData.sessions[0].ended_at).toLocaleDateString('en-US', { weekday: 'long' }) : null}
+              lastSession={
+                lateNightData?.sessions[0]?.ended_at
+                  ? new Date(lateNightData.sessions[0].ended_at).toLocaleDateString('en-US', {
+                      weekday: 'long',
+                    })
+                  : null
+              }
             />
             <BurnoutRiskCard risk={calculateBurnoutRisk()} />
             <WeekdayWeekendCard {...calculateWeekdayWeekend()} />
@@ -293,7 +312,7 @@ export default function DashboardPage() {
             <SessionNotesCard
               childId={activeChildId}
               childName={activeChild.name}
-              recentSessions={todayActivity?.map(s => ({
+              recentSessions={todayActivity?.map((s) => ({
                 id: s.id,
                 game: s.game,
                 started_at: s.started_at,

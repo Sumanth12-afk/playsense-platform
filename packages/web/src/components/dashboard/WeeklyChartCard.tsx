@@ -11,7 +11,7 @@ interface WeeklyChartCardProps {
 }
 
 export const WeeklyChartCard = ({ data }: WeeklyChartCardProps) => {
-  const maxHours = Math.max(...data.map(d => d.hours), 0.1);
+  const maxHours = Math.max(...data.map((d) => d.hours), 0.1);
   const avgHours = data.length ? data.reduce((acc, d) => acc + d.hours, 0) / data.length : 0;
   const weekendDays = ['Sat', 'Sun'];
 
@@ -35,7 +35,7 @@ export const WeeklyChartCard = ({ data }: WeeklyChartCardProps) => {
         {data.map((day, index) => {
           const height = maxHours > 0 ? (day.hours / maxHours) * 120 : 0;
           const isWeekend = weekendDays.includes(day.day);
-          
+
           return (
             <div key={day.day} className="flex flex-1 flex-col items-center gap-2">
               <span className="text-xs font-medium text-muted-foreground">
@@ -45,16 +45,15 @@ export const WeeklyChartCard = ({ data }: WeeklyChartCardProps) => {
                 initial={{ height: 0 }}
                 animate={{ height: height }}
                 transition={{ delay: 0.4 + index * 0.05, duration: 0.5, ease: 'easeOut' }}
-                className={cn(
-                  'w-full rounded-t-lg',
-                  isWeekend ? 'bg-accent' : 'bg-primary'
-                )}
+                className={cn('w-full rounded-t-lg', isWeekend ? 'bg-accent' : 'bg-primary')}
                 style={{ minHeight: day.hours > 0 ? 8 : 0 }}
               />
-              <span className={cn(
-                'text-xs font-medium',
-                isWeekend ? 'text-accent-foreground' : 'text-muted-foreground'
-              )}>
+              <span
+                className={cn(
+                  'text-xs font-medium',
+                  isWeekend ? 'text-accent-foreground' : 'text-muted-foreground'
+                )}
+              >
                 {day.day}
               </span>
             </div>
@@ -75,4 +74,3 @@ export const WeeklyChartCard = ({ data }: WeeklyChartCardProps) => {
     </motion.div>
   );
 };
-

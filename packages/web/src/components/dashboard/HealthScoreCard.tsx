@@ -129,20 +129,21 @@ export const HealthScoreCard = ({ healthScore }: Props) => {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className={cn('text-3xl font-bold', config.textClass)}>
-              {score}
-            </span>
+            <span className={cn('text-3xl font-bold', config.textClass)}>{score}</span>
             <span className="text-xs text-muted-foreground">/ 100</span>
           </div>
         </div>
 
         {/* Status & Factors */}
         <div className="flex-1">
-          <div className={cn('inline-flex items-center gap-2 rounded-full px-3 py-1.5', config.bgClass)}>
+          <div
+            className={cn(
+              'inline-flex items-center gap-2 rounded-full px-3 py-1.5',
+              config.bgClass
+            )}
+          >
             <div className={cn('h-2 w-2 rounded-full', config.textClass, 'bg-current')} />
-            <span className={cn('text-sm font-medium', config.textClass)}>
-              {config.label}
-            </span>
+            <span className={cn('text-sm font-medium', config.textClass)}>{config.label}</span>
           </div>
           <p className="mt-2 text-sm text-muted-foreground">{config.description}</p>
 
@@ -151,12 +152,17 @@ export const HealthScoreCard = ({ healthScore }: Props) => {
               const Icon = factorIcons[key as keyof typeof factorIcons];
               const label = factorLabels[key as keyof typeof factorLabels];
               const statusInfo = factorStatus[value as keyof typeof factorStatus];
-              
+
               return (
                 <div key={key} className="flex items-center gap-2">
                   <Icon className="h-4 w-4 text-muted-foreground" />
                   <span className="text-xs text-muted-foreground truncate">{label}:</span>
-                  <span className={cn('rounded-full px-2 py-0.5 text-xs font-medium', statusInfo?.class || 'bg-muted')}>
+                  <span
+                    className={cn(
+                      'rounded-full px-2 py-0.5 text-xs font-medium',
+                      statusInfo?.class || 'bg-muted'
+                    )}
+                  >
                     {statusInfo?.label || value}
                   </span>
                 </div>
@@ -167,4 +173,4 @@ export const HealthScoreCard = ({ healthScore }: Props) => {
       </div>
     </motion.div>
   );
-}
+};

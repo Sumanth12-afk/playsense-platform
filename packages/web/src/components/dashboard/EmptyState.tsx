@@ -15,11 +15,10 @@ export const EmptyState = () => {
       <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary-light mb-6">
         <UserPlus className="h-10 w-10 text-primary" />
       </div>
-      <h2 className="text-2xl font-bold text-foreground mb-2">
-        Welcome to PlaySense
-      </h2>
+      <h2 className="text-2xl font-bold text-foreground mb-2">Welcome to PlaySense</h2>
       <p className="text-muted-foreground max-w-md mb-8">
-        Get started by adding your child's profile. You'll be able to track their gaming activity and get insights to help guide healthy gaming habits.
+        Get started by adding your child's profile. You'll be able to track their gaming activity
+        and get insights to help guide healthy gaming habits.
       </p>
       <Link href="/onboarding">
         <Button size="lg" className="gap-2">
@@ -30,4 +29,3 @@ export const EmptyState = () => {
     </motion.div>
   );
 };
-

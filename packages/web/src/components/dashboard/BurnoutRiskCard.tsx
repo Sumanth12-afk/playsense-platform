@@ -56,7 +56,7 @@ export const BurnoutRiskCard = ({ risk }: BurnoutRiskCardProps) => {
             <p className="text-sm text-muted-foreground">Based on session patterns</p>
           </div>
         </div>
-        
+
         <div className={cn('rounded-full px-3 py-1.5', config.bg)}>
           <span className={cn('text-sm font-semibold', config.color)}>{config.label}</span>
         </div>
@@ -85,9 +85,7 @@ export const BurnoutRiskCard = ({ risk }: BurnoutRiskCardProps) => {
         </div>
       </div>
 
-      <p className="mt-4 text-sm text-muted-foreground">
-        {risk.description}
-      </p>
+      <p className="mt-4 text-sm text-muted-foreground">{risk.description}</p>
 
       <div className="mt-4 rounded-lg bg-muted/50 p-3">
         <p className="text-xs text-muted-foreground">

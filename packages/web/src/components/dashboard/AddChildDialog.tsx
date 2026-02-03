@@ -64,9 +64,7 @@ export const AddChildDialog = () => {
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">
-              Child's name
-            </label>
+            <label className="block text-sm font-medium text-foreground mb-2">Child's name</label>
             <Input
               placeholder="Enter name"
               value={childName}
@@ -76,9 +74,7 @@ export const AddChildDialog = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">
-              Age range
-            </label>
+            <label className="block text-sm font-medium text-foreground mb-2">Age range</label>
             <div className="grid grid-cols-2 gap-3">
               {ageRanges.map((range) => (
                 <button
@@ -103,10 +99,7 @@ export const AddChildDialog = () => {
           <Button variant="outline" onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button 
-            onClick={handleSubmit} 
-            disabled={!childName.trim() || !ageRange || isSaving}
-          >
+          <Button onClick={handleSubmit} disabled={!childName.trim() || !ageRange || isSaving}>
             {isSaving ? 'Adding...' : 'Add Child'}
           </Button>
         </DialogFooter>
@@ -114,4 +107,3 @@ export const AddChildDialog = () => {
     </Dialog>
   );
 };
-

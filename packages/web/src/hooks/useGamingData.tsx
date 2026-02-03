@@ -1,12 +1,12 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { supabase } from "@/lib/supabase";
-import { useAuth } from "./useAuth";
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from './useAuth';
 
 export interface Game {
   id: string;
   name: string;
-  category: "competitive" | "creative" | "casual" | "social";
+  category: 'competitive' | 'creative' | 'casual' | 'social';
   icon_url: string | null;
 }
 
@@ -15,21 +15,17 @@ export interface GamingSession {
   child_id: string;
   game_id: string;
   started_at: string;
-  ended_at: string | null;  // Can be null for active sessions
+  ended_at: string | null; // Can be null for active sessions
   duration_minutes: number;
-  is_active?: boolean;  // True if session is currently in progress
+  is_active?: boolean; // True if session is currently in progress
   game?: Game;
 }
 
-
 export const useGames = () => {
   return useQuery({
-    queryKey: ["games"],
+    queryKey: ['games'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("games")
-        .select("*")
-        .order("name");
+      const { data, error } = await supabase.from('games').select('*').order('name');
 
       if (error) throw error;
       return data as Game[];
@@ -85,10 +81,12 @@ export const useActiveSession = (childId?: string) => {
       // Query for sessions without ended_at (active sessions)
       const { data, error } = await supabase
         .from('gaming_sessions')
-        .select(`
+        .select(
+          `
           *,
           game:games(*)
-        `)
+        `
+        )
         .eq('child_id', childId)
         .is('ended_at', null)
         .order('started_at', { ascending: false })
@@ -108,21 +106,23 @@ export const useGamingSessions = (childId?: string) => {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ["gaming_sessions", childId],
+    queryKey: ['gaming_sessions', childId],
     queryFn: async () => {
       if (!childId) {
         return [];
       }
 
       const { data, error } = await supabase
-        .from("gaming_sessions")
-        .select(`
+        .from('gaming_sessions')
+        .select(
+          `
           *,
           game:games(*),
           child:children(*)
-        `)
-        .eq("child_id", childId)
-        .order("started_at", { ascending: false });
+        `
+        )
+        .eq('child_id', childId)
+        .order('started_at', { ascending: false });
 
       if (error) throw error;
       return (data || []) as (GamingSession & { game: Game })[];
@@ -139,21 +139,23 @@ export const useTodayActivity = (childId?: string) => {
   today.setHours(0, 0, 0, 0);
 
   return useQuery({
-    queryKey: ["today_activity", childId],
+    queryKey: ['today_activity', childId],
     queryFn: async () => {
       if (!childId) {
         return [];
       }
 
       const { data, error } = await supabase
-        .from("gaming_sessions")
-        .select(`
+        .from('gaming_sessions')
+        .select(
+          `
           *,
           game:games(*)
-        `)
-        .eq("child_id", childId)
-        .gte("started_at", today.toISOString())
-        .order("started_at", { ascending: false });
+        `
+        )
+        .eq('child_id', childId)
+        .gte('started_at', today.toISOString())
+        .order('started_at', { ascending: false });
 
       if (error) throw error;
       return (data || []) as (GamingSession & { game: Game })[];
@@ -171,23 +173,25 @@ export const useWeeklyStats = (childId?: string) => {
   weekAgo.setHours(0, 0, 0, 0);
 
   return useQuery({
-    queryKey: ["weekly_stats", childId],
+    queryKey: ['weekly_stats', childId],
     queryFn: async () => {
       if (!childId) {
         // Return empty stats for all days
         const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        return days.map(day => ({ day, hours: 0 }));
+        return days.map((day) => ({ day, hours: 0 }));
       }
 
       const { data, error } = await supabase
-        .from("gaming_sessions")
-        .select(`
+        .from('gaming_sessions')
+        .select(
+          `
           *,
           game:games(*)
-        `)
-        .eq("child_id", childId)
-        .gte("started_at", weekAgo.toISOString())
-        .order("started_at", { ascending: true });
+        `
+        )
+        .eq('child_id', childId)
+        .gte('started_at', weekAgo.toISOString())
+        .order('started_at', { ascending: true });
 
       if (error) throw error;
 
@@ -204,10 +208,10 @@ export const useWeeklyStats = (childId?: string) => {
       }
 
       // Sum up hours
-      (data || [] as GamingSession[]).forEach((session) => {
+      (data || ([] as GamingSession[])).forEach((session) => {
         const date = new Date(session.started_at);
         const dayName = days[date.getDay()];
-        dailyStats[dayName] = (dailyStats[dayName] || 0) + (session.duration_minutes / 60);
+        dailyStats[dayName] = (dailyStats[dayName] || 0) + session.duration_minutes / 60;
       });
 
       return Object.entries(dailyStats).map(([day, hours]) => ({
@@ -227,7 +231,7 @@ export const useCategoryBreakdown = (childId?: string) => {
   weekAgo.setDate(weekAgo.getDate() - 7);
 
   return useQuery({
-    queryKey: ["category_breakdown", childId],
+    queryKey: ['category_breakdown', childId],
     queryFn: async () => {
       if (!childId) {
         // Return empty breakdown
@@ -240,13 +244,15 @@ export const useCategoryBreakdown = (childId?: string) => {
       }
 
       const { data, error } = await supabase
-        .from("gaming_sessions")
-        .select(`
+        .from('gaming_sessions')
+        .select(
+          `
           duration_minutes,
           game:games(category)
-        `)
-        .eq("child_id", childId)
-        .gte("started_at", weekAgo.toISOString());
+        `
+        )
+        .eq('child_id', childId)
+        .gte('started_at', weekAgo.toISOString());
 
       if (error) throw error;
 
@@ -283,7 +289,7 @@ export const useLateNightSessions = (childId?: string) => {
   weekAgo.setDate(weekAgo.getDate() - 7);
 
   return useQuery({
-    queryKey: ["late_night_sessions", childId],
+    queryKey: ['late_night_sessions', childId],
     queryFn: async () => {
       if (!childId) {
         return {
@@ -294,13 +300,15 @@ export const useLateNightSessions = (childId?: string) => {
       }
 
       const { data, error } = await supabase
-        .from("gaming_sessions")
-        .select(`
+        .from('gaming_sessions')
+        .select(
+          `
           *,
           game:games(*)
-        `)
-        .eq("child_id", childId)
-        .gte("started_at", weekAgo.toISOString());
+        `
+        )
+        .eq('child_id', childId)
+        .gte('started_at', weekAgo.toISOString());
 
       if (error) throw error;
 
@@ -312,7 +320,6 @@ export const useLateNightSessions = (childId?: string) => {
         const startHour = new Date(session.started_at).getHours();
         return endHour >= 22 || startHour >= 22 || endHour < 6;
       });
-
 
       const totalLateMinutes = lateNight.reduce((sum, s) => sum + s.duration_minutes, 0);
 
@@ -334,7 +341,7 @@ export const useGameDominance = (childId?: string) => {
   weekAgo.setDate(weekAgo.getDate() - 7);
 
   return useQuery({
-    queryKey: ["game_dominance", childId],
+    queryKey: ['game_dominance', childId],
     queryFn: async () => {
       if (!childId) {
         return {
@@ -346,13 +353,15 @@ export const useGameDominance = (childId?: string) => {
       }
 
       const { data, error } = await supabase
-        .from("gaming_sessions")
-        .select(`
+        .from('gaming_sessions')
+        .select(
+          `
           duration_minutes,
           game:games(id, name)
-        `)
-        .eq("child_id", childId)
-        .gte("started_at", weekAgo.toISOString());
+        `
+        )
+        .eq('child_id', childId)
+        .gte('started_at', weekAgo.toISOString());
 
       if (error) throw error;
 
@@ -374,7 +383,7 @@ export const useGameDominance = (childId?: string) => {
       return {
         topGame: topGame?.name || null,
         percentage: topGame ? Math.round((topGame.minutes / total) * 100) : 0,
-        isDominant: topGame ? (topGame.minutes / total) >= 0.7 : false,
+        isDominant: topGame ? topGame.minutes / total >= 0.7 : false,
         allGames: sorted.map((g) => ({
           name: g.name,
           hours: Math.round((g.minutes / 60) * 10) / 10,
@@ -387,4 +396,3 @@ export const useGameDominance = (childId?: string) => {
     refetchOnWindowFocus: true, // Refetch when user returns to tab
   });
 };
-

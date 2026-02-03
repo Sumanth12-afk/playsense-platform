@@ -1,6 +1,6 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase";
-import { useAuth } from "./useAuth";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from './useAuth';
 
 export interface Child {
   id: string;
@@ -17,15 +17,15 @@ export const useChildren = () => {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ["children", user?.uid],
+    queryKey: ['children', user?.uid],
     queryFn: async () => {
       if (!user?.uid) return [];
 
       const { data, error } = await supabase
-        .from("children")
-        .select("*")
-        .eq("parent_id", user.uid)
-        .order("created_at", { ascending: true });
+        .from('children')
+        .select('*')
+        .eq('parent_id', user.uid)
+        .order('created_at', { ascending: true });
 
       if (error) throw error;
       return data as Child[];
@@ -40,10 +40,10 @@ export const useAddChild = () => {
 
   return useMutation({
     mutationFn: async (child: { name: string; age_range: string; device_name?: string }) => {
-      if (!user?.uid) throw new Error("User not authenticated");
+      if (!user?.uid) throw new Error('User not authenticated');
 
       const { data, error } = await supabase
-        .from("children")
+        .from('children')
         .insert({
           ...child,
           parent_id: user.uid,
@@ -59,7 +59,7 @@ export const useAddChild = () => {
           p_child_id: data.id,
           p_points: 50,
           p_reason: 'welcome_bonus',
-          p_reference_id: null
+          p_reference_id: null,
         });
       } catch (pointsError) {
         console.error('Failed to award welcome points:', pointsError);
@@ -70,27 +70,34 @@ export const useAddChild = () => {
     },
     onSuccess: (data) => {
       // Invalidate the children query with the correct key
-      queryClient.invalidateQueries({ queryKey: ["children"] });
+      queryClient.invalidateQueries({ queryKey: ['children'] });
       // Also invalidate points balance
-      queryClient.invalidateQueries({ queryKey: ["points_balance"] });
+      queryClient.invalidateQueries({ queryKey: ['points_balance'] });
       // Also set the new child in the cache immediately
-      queryClient.setQueryData(["children", user?.uid], (old: Child[] | undefined) => {
+      queryClient.setQueryData(['children', user?.uid], (old: Child[] | undefined) => {
         return old ? [...old, data] : [data];
       });
     },
   });
 };
 
-
 export const useUpdateChild = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, ...updates }: { id: string; name?: string; age_range?: string; device_name?: string }) => {
+    mutationFn: async ({
+      id,
+      ...updates
+    }: {
+      id: string;
+      name?: string;
+      age_range?: string;
+      device_name?: string;
+    }) => {
       const { data, error } = await supabase
-        .from("children")
+        .from('children')
         .update(updates)
-        .eq("id", id)
+        .eq('id', id)
         .select()
         .single();
 
@@ -98,7 +105,7 @@ export const useUpdateChild = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["children"] });
+      queryClient.invalidateQueries({ queryKey: ['children'] });
     },
   });
 };
@@ -108,16 +115,12 @@ export const useDeleteChild = () => {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from("children")
-        .delete()
-        .eq("id", id);
+      const { error } = await supabase.from('children').delete().eq('id', id);
 
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["children"] });
+      queryClient.invalidateQueries({ queryKey: ['children'] });
     },
   });
 };
-

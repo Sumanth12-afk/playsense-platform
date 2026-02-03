@@ -52,7 +52,8 @@ export function calculateHealthScore(sessions: GamingSession[]): HealthScore {
     const currentStart = new Date(sortedSessions[i].start_time).getTime();
     const breakMinutes = (currentStart - prevEnd) / 60000;
 
-    if (breakMinutes > 0 && breakMinutes < 240) { // Less than 4 hours
+    if (breakMinutes > 0 && breakMinutes < 240) {
+      // Less than 4 hours
       totalBreakTime += breakMinutes;
       breakCount++;
     }
@@ -170,9 +171,7 @@ export function calculateWeeklyOverview(sessions: GamingSession[]): WeeklyOvervi
 
   const dayActivities = days.map((day) => {
     const dayStr = format(day, 'yyyy-MM-dd');
-    const daySessions = sessions.filter(
-      (s) => s.start_time.startsWith(dayStr)
-    );
+    const daySessions = sessions.filter((s) => s.start_time.startsWith(dayStr));
 
     const hours = daySessions.reduce((sum, s) => sum + s.duration_minutes, 0) / 60;
 
@@ -301,4 +300,3 @@ export function calculateLateNightGaming(sessions: GamingSession[]): LateNightGa
     explanation,
   };
 }
-

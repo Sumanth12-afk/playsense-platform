@@ -47,19 +47,15 @@ export default function LateNightGamingCard({ lateNightGaming }: Props) {
       </div>
 
       <div className="text-center mb-4">
-        <div className={`inline-block px-6 py-3 rounded-xl ${getSeverityColor(lateNightGaming.sessions_after_10pm)}`}>
-          <div className="text-3xl font-bold">
-            {lateNightGaming.sessions_after_10pm}
-          </div>
-          <div className="text-sm font-medium mt-1">
-            sessions this week
-          </div>
+        <div
+          className={`inline-block px-6 py-3 rounded-xl ${getSeverityColor(lateNightGaming.sessions_after_10pm)}`}
+        >
+          <div className="text-3xl font-bold">{lateNightGaming.sessions_after_10pm}</div>
+          <div className="text-sm font-medium mt-1">sessions this week</div>
         </div>
 
         {lateNightGaming.hours_after_10pm > 0 && (
-          <p className="text-sm text-gray-600 mt-3">
-            {lateNightGaming.hours_after_10pm}h total
-          </p>
+          <p className="text-sm text-gray-600 mt-3">{lateNightGaming.hours_after_10pm}h total</p>
         )}
       </div>
 
@@ -69,19 +65,17 @@ export default function LateNightGamingCard({ lateNightGaming }: Props) {
       </div>
 
       <div className="p-4 bg-gray-50 rounded-lg">
-        <p className="text-sm text-gray-700">
-          {lateNightGaming.explanation}
-        </p>
+        <p className="text-sm text-gray-700">{lateNightGaming.explanation}</p>
       </div>
 
       {lateNightGaming.sessions_after_10pm > 4 && (
         <div className="mt-4 p-3 bg-red-50 rounded-lg border border-red-200">
           <p className="text-xs text-red-700">
-            <strong>Sleep Impact:</strong> Frequent late-night gaming can affect sleep quality, mood, and daily energy levels.
+            <strong>Sleep Impact:</strong> Frequent late-night gaming can affect sleep quality,
+            mood, and daily energy levels.
           </p>
         </div>
       )}
     </div>
   );
 }
-

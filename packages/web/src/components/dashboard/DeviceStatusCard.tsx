@@ -9,7 +9,7 @@ interface DeviceStatusCardProps {
 
 export const DeviceStatusCard = ({ child }: DeviceStatusCardProps) => {
   const isConnected = !!child.last_sync_at;
-  
+
   const timeSinceSync = () => {
     if (!child.last_sync_at) return 'Never synced';
     const diff = Date.now() - new Date(child.last_sync_at).getTime();
@@ -22,8 +22,8 @@ export const DeviceStatusCard = ({ child }: DeviceStatusCardProps) => {
   };
 
   // Consider device connected if synced within last hour
-  const recentlyConnected = child.last_sync_at && 
-    (Date.now() - new Date(child.last_sync_at).getTime()) < 3600000;
+  const recentlyConnected =
+    child.last_sync_at && Date.now() - new Date(child.last_sync_at).getTime() < 3600000;
 
   return (
     <motion.div
@@ -33,27 +33,31 @@ export const DeviceStatusCard = ({ child }: DeviceStatusCardProps) => {
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className={cn(
-            'flex h-10 w-10 items-center justify-center rounded-xl',
-            recentlyConnected ? 'bg-health-green-bg' : 'bg-muted'
-          )}>
-            <Monitor className={cn(
-              'h-5 w-5',
-              recentlyConnected ? 'text-health-green' : 'text-muted-foreground'
-            )} />
+          <div
+            className={cn(
+              'flex h-10 w-10 items-center justify-center rounded-xl',
+              recentlyConnected ? 'bg-health-green-bg' : 'bg-muted'
+            )}
+          >
+            <Monitor
+              className={cn(
+                'h-5 w-5',
+                recentlyConnected ? 'text-health-green' : 'text-muted-foreground'
+              )}
+            />
           </div>
           <div>
             <h4 className="font-medium text-foreground">{child.name}'s PC</h4>
-            <p className="text-sm text-muted-foreground">
-              {child.age_range} years old
-            </p>
+            <p className="text-sm text-muted-foreground">{child.age_range} years old</p>
           </div>
         </div>
-        
-        <div className={cn(
-          'flex items-center gap-2 rounded-full px-3 py-1.5',
-          recentlyConnected ? 'bg-health-green-bg' : 'bg-health-red-bg'
-        )}>
+
+        <div
+          className={cn(
+            'flex items-center gap-2 rounded-full px-3 py-1.5',
+            recentlyConnected ? 'bg-health-green-bg' : 'bg-health-red-bg'
+          )}
+        >
           {recentlyConnected ? (
             <>
               <Wifi className="h-4 w-4 text-health-green" />
@@ -78,4 +82,3 @@ export const DeviceStatusCard = ({ child }: DeviceStatusCardProps) => {
     </motion.div>
   );
 };
-

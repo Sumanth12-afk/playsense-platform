@@ -1,11 +1,7 @@
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Info } from 'lucide-react';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface CategoryData {
   category: string;
@@ -63,14 +59,13 @@ export const CategoryBreakdownCard = ({ data }: CategoryBreakdownCardProps) => {
           </TooltipTrigger>
           <TooltipContent className="max-w-xs">
             <p className="text-sm">
-              Games are categorized by their primary gameplay style. This helps understand what type of gaming experiences your child enjoys.
+              Games are categorized by their primary gameplay style. This helps understand what type
+              of gaming experiences your child enjoys.
             </p>
           </TooltipContent>
         </Tooltip>
       </div>
-      <p className="mt-1 text-sm text-muted-foreground">
-        What types of games are being played
-      </p>
+      <p className="mt-1 text-sm text-muted-foreground">What types of games are being played</p>
 
       {/* Donut visualization */}
       <div className="mt-6 flex items-center justify-center">
@@ -82,7 +77,7 @@ export const CategoryBreakdownCard = ({ data }: CategoryBreakdownCardProps) => {
                 const strokeDasharray = `${cat.percentage * 2.51327} ${251.327}`;
                 const strokeDashoffset = -offset * 2.51327;
                 offset += cat.percentage;
-                
+
                 return (
                   <motion.circle
                     key={cat.category}
@@ -120,7 +115,9 @@ export const CategoryBreakdownCard = ({ data }: CategoryBreakdownCardProps) => {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className={cn('h-3 w-3 rounded-full', categoryColors[cat.category] || 'bg-muted')} />
+                <div
+                  className={cn('h-3 w-3 rounded-full', categoryColors[cat.category] || 'bg-muted')}
+                />
                 <Tooltip>
                   <TooltipTrigger className="text-left">
                     <span className="text-sm font-medium text-foreground">
@@ -133,10 +130,13 @@ export const CategoryBreakdownCard = ({ data }: CategoryBreakdownCardProps) => {
                 </Tooltip>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">
-                  {cat.hours}h
-                </span>
-                <span className={cn('text-sm font-semibold', categoryTextColors[cat.category] || 'text-foreground')}>
+                <span className="text-sm text-muted-foreground">{cat.hours}h</span>
+                <span
+                  className={cn(
+                    'text-sm font-semibold',
+                    categoryTextColors[cat.category] || 'text-foreground'
+                  )}
+                >
                   {cat.percentage}%
                 </span>
               </div>

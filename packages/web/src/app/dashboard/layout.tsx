@@ -7,16 +7,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/useAuth';
 import { Child } from '@playsense/shared';
-import { 
-  LayoutDashboard, 
-  BarChart3, 
-  Lightbulb, 
-  MessageCircleHeart, 
+import {
+  LayoutDashboard,
+  BarChart3,
+  Lightbulb,
+  MessageCircleHeart,
   Settings,
   Menu,
   X,
   Gamepad2,
-  LogOut
+  LogOut,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -29,11 +29,7 @@ const navItems = [
   { path: '/dashboard/settings', label: 'Settings', icon: Settings },
 ];
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -105,8 +101,8 @@ export default function DashboardLayout({
 
           {/* Sign Out & Footer */}
           <div className="border-t border-border p-4 space-y-4">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               className="w-full justify-start gap-3 text-muted-foreground hover:text-foreground"
               onClick={handleSignOut}
             >
@@ -185,9 +181,7 @@ export default function DashboardLayout({
 
       {/* Main Content */}
       <main className="min-h-screen pt-16 lg:pl-64 lg:pt-0">
-        <div className="mx-auto max-w-6xl p-4 lg:p-8">
-          {children}
-        </div>
+        <div className="mx-auto max-w-6xl p-4 lg:p-8">{children}</div>
       </main>
     </div>
   );

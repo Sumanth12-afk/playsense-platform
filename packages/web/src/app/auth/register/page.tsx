@@ -121,7 +121,7 @@ export default function RegisterPage() {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              {googleLoading ? "Connecting..." : "Continue with Google"}
+              {googleLoading ? 'Connecting...' : 'Continue with Google'}
             </Button>
 
             <div className="relative mb-4">
@@ -151,7 +151,7 @@ export default function RegisterPage() {
                 <div className="relative">
                   <Input
                     id="password"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -172,9 +172,7 @@ export default function RegisterPage() {
                     )}
                   </Button>
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Must be at least 6 characters
-                </p>
+                <p className="text-xs text-muted-foreground">Must be at least 6 characters</p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="confirm-password">Confirm Password</Label>
@@ -189,7 +187,7 @@ export default function RegisterPage() {
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Creating account..." : "Create Account"}
+                {loading ? 'Creating account...' : 'Create Account'}
               </Button>
             </form>
 

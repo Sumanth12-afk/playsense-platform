@@ -2,16 +2,16 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { 
-  Gamepad2, 
-  ArrowRight, 
-  BarChart3, 
-  Heart, 
-  Shield, 
+import {
+  Gamepad2,
+  ArrowRight,
+  BarChart3,
+  Heart,
+  Shield,
   MessageCircleHeart,
   Moon,
   Flame,
-  Check
+  Check,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -91,24 +91,24 @@ const Index = () => {
             <Shield className="h-4 w-4 text-primary" />
             <span className="text-sm font-medium text-primary">Insight, not intrusion</span>
           </motion.div>
-          
+
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight"
           >
-            Understand your child's gaming,{' '}
-            <span className="text-primary">respectfully</span>
+            Understand your child's gaming, <span className="text-primary">respectfully</span>
           </motion.h1>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             className="mt-6 text-xl text-muted-foreground max-w-2xl mx-auto"
           >
-            PlaySense helps parents see gaming habits without spying. Get insights that reduce conflict and build trust—not walls.
+            PlaySense helps parents see gaming habits without spying. Get insights that reduce
+            conflict and build trust—not walls.
           </motion.p>
 
           <motion.div
@@ -145,7 +145,8 @@ const Index = () => {
               Everything you need to understand gaming habits
             </h2>
             <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-              Get meaningful insights without crossing privacy boundaries. PlaySense gives you the information you need to have informed, caring conversations.
+              Get meaningful insights without crossing privacy boundaries. PlaySense gives you the
+              information you need to have informed, caring conversations.
             </p>
           </motion.div>
 
@@ -184,7 +185,8 @@ const Index = () => {
               <h2 className="text-2xl font-bold text-foreground">What PlaySense never does</h2>
             </div>
             <p className="text-muted-foreground mb-8">
-              We believe monitoring should respect your child's dignity. Here's what we will never do:
+              We believe monitoring should respect your child's dignity. Here's what we will never
+              do:
             </p>
             <div className="grid sm:grid-cols-2 gap-4">
               {notFeatures.map((item, i) => (
@@ -219,7 +221,8 @@ const Index = () => {
               Ready to understand, not control?
             </h2>
             <p className="mt-4 text-muted-foreground">
-              Start getting insights that help you have better conversations with your child about gaming.
+              Start getting insights that help you have better conversations with your child about
+              gaming.
             </p>
             <Link href="/auth/register">
               <Button size="lg" className="mt-8 gap-2 text-lg px-8">

@@ -6,14 +6,10 @@ import { Providers } from './providers';
 
 export const metadata: Metadata = {
   title: 'PlaySense - Privacy-First Parental Gaming Insights',
-  description: 'Understand your child\'s gaming patterns with calm, human-readable insights',
+  description: "Understand your child's gaming patterns with calm, human-readable insights",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>

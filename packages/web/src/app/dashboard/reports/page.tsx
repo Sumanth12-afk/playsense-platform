@@ -34,54 +34,63 @@ const ReportsPage = () => {
 
   // Auto-select first child if none selected
   const activeChildId = selectedChildId || children?.[0]?.id;
-  const activeChild = children?.find(c => c.id === activeChildId);
+  const activeChild = children?.find((c) => c.id === activeChildId);
 
   const { data: weeklyStats, isLoading: weeklyLoading } = useWeeklyStats(activeChildId);
   const { data: sessions, isLoading: sessionsLoading } = useGamingSessions(activeChildId);
 
   // Group sessions by date
-  const groupedSessions = sessions?.reduce((acc, session) => {
-    const date = new Date(session.started_at).toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-    });
-    
-    if (!acc[date]) {
-      acc[date] = [];
-    }
-    acc[date].push(session);
-    return acc;
-  }, {} as Record<string, typeof sessions>) || {};
+  const groupedSessions =
+    sessions?.reduce(
+      (acc, session) => {
+        const date = new Date(session.started_at).toLocaleDateString('en-US', {
+          weekday: 'short',
+          month: 'short',
+          day: 'numeric',
+        });
+
+        if (!acc[date]) {
+          acc[date] = [];
+        }
+        acc[date].push(session);
+        return acc;
+      },
+      {} as Record<string, typeof sessions>
+    ) || {};
 
   // Convert grouped sessions to daily reports
   const recentDays = Object.entries(groupedSessions)
     .slice(0, 7) // Show last 7 days with data
     .map(([date, daySessions]) => {
-      const games = daySessions.reduce((acc, session) => {
-        const gameName = session.game?.name || 'Unknown Game';
-        const category = session.game?.category || 'other';
-        const existing = acc.find(g => g.name === gameName);
-        
-        if (existing) {
-          existing.minutes += session.duration_minutes || 0;
-        } else {
-          acc.push({
-            name: gameName,
-            minutes: session.duration_minutes || 0,
-            category: category as 'competitive' | 'creative' | 'casual' | 'social',
-          });
-        }
-        return acc;
-      }, [] as { name: string; minutes: number; category: string }[]);
+      const games = daySessions.reduce(
+        (acc, session) => {
+          const gameName = session.game?.name || 'Unknown Game';
+          const category = session.game?.category || 'other';
+          const existing = acc.find((g) => g.name === gameName);
+
+          if (existing) {
+            existing.minutes += session.duration_minutes || 0;
+          } else {
+            acc.push({
+              name: gameName,
+              minutes: session.duration_minutes || 0,
+              category: category as 'competitive' | 'creative' | 'casual' | 'social',
+            });
+          }
+          return acc;
+        },
+        [] as { name: string; minutes: number; category: string }[]
+      );
 
       const total = games.reduce((sum, g) => sum + g.minutes, 0);
-      
+
       // Format date for display
-      const isToday = new Date(daySessions[0].started_at).toDateString() === new Date().toDateString();
-      const isYesterday = new Date(daySessions[0].started_at).toDateString() === 
+      const isToday =
+        new Date(daySessions[0].started_at).toDateString() === new Date().toDateString();
+      const isYesterday =
+        new Date(daySessions[0].started_at).toDateString() ===
         new Date(Date.now() - 86400000).toDateString();
-      
+
       return {
         date: isToday ? 'Today' : isYesterday ? 'Yesterday' : date,
         games,
@@ -110,17 +119,17 @@ const ReportsPage = () => {
         className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div>
-          <h1 className="text-2xl font-bold text-foreground lg:text-3xl">
-            Reports
-          </h1>
+          <h1 className="text-2xl font-bold text-foreground lg:text-3xl">Reports</h1>
           <p className="mt-2 text-muted-foreground">
-            {activeChild ? `${activeChild.name}'s gaming activity history` : 'Detailed gaming activity history'}
+            {activeChild
+              ? `${activeChild.name}'s gaming activity history`
+              : 'Detailed gaming activity history'}
           </p>
         </div>
-        
+
         <div className="flex items-center gap-3">
           {children.length > 1 && (
-            <ChildSelector 
+            <ChildSelector
               children={children}
               selectedId={activeChildId}
               onSelect={setSelectedChildId}
@@ -214,7 +223,8 @@ const ReportsPage = () => {
           >
             <Gamepad2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <p className="text-muted-foreground">
-              No gaming sessions recorded yet. Sessions will appear here once the companion app syncs data.
+              No gaming sessions recorded yet. Sessions will appear here once the companion app
+              syncs data.
             </p>
           </motion.div>
         ) : (
@@ -249,12 +259,18 @@ const ReportsPage = () => {
               <div className="mt-4 space-y-3">
                 {day.games.map((game) => (
                   <div key={game.name} className="flex items-center gap-3">
-                    <div className={cn('h-8 w-1 rounded-full', categoryColors[game.category] || 'bg-muted-foreground')} />
+                    <div
+                      className={cn(
+                        'h-8 w-1 rounded-full',
+                        categoryColors[game.category] || 'bg-muted-foreground'
+                      )}
+                    />
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
                         <span className="font-medium text-foreground">{game.name}</span>
                         <span className="text-sm text-muted-foreground">
-                          {Math.floor(game.minutes / 60) > 0 && `${Math.floor(game.minutes / 60)}h `}
+                          {Math.floor(game.minutes / 60) > 0 &&
+                            `${Math.floor(game.minutes / 60)}h `}
                           {game.minutes % 60}m
                         </span>
                       </div>
