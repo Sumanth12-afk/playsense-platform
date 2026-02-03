@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Gamepad2, 
-  ArrowRight, 
+import {
+  Gamepad2,
+  ArrowRight,
   ArrowLeft,
   User,
   Monitor,
@@ -15,7 +15,7 @@ import {
   Heart,
   BarChart3,
   Download,
-  Loader2
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -49,7 +49,7 @@ export default function OnboardingPage() {
   const nextStep = async () => {
     const steps: OnboardingStep[] = ['welcome', 'child', 'device', 'email', 'complete'];
     const currentIndex = steps.indexOf(step);
-    
+
     // Save child when moving from 'child' step
     if (step === 'child' && childName && ageRange) {
       setIsSaving(true);
@@ -63,7 +63,7 @@ export default function OnboardingPage() {
       }
       setIsSaving(false);
     }
-    
+
     if (currentIndex < steps.length - 1) {
       setStep(steps[currentIndex + 1]);
     }
@@ -144,14 +144,14 @@ export default function OnboardingPage() {
               exit={{ opacity: 0, y: -20 }}
               className="max-w-lg text-center"
             >
-              <motion.div 
+              <motion.div
                 initial={{ scale: 0.9 }}
                 animate={{ scale: 1 }}
                 className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-3xl bg-primary"
               >
                 <Gamepad2 className="h-12 w-12 text-primary-foreground" />
               </motion.div>
-              
+
               <h1 className="text-3xl font-bold text-foreground lg:text-4xl">
                 Welcome to PlaySense
               </h1>
@@ -198,10 +198,8 @@ export default function OnboardingPage() {
               <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-light">
                 <User className="h-8 w-8 text-primary" />
               </div>
-              
-              <h2 className="text-2xl font-bold text-foreground text-center">
-                Add your child
-              </h2>
+
+              <h2 className="text-2xl font-bold text-foreground text-center">Add your child</h2>
               <p className="mt-2 text-center text-muted-foreground">
                 This helps us personalize insights for their age group
               </p>
@@ -248,8 +246,8 @@ export default function OnboardingPage() {
                   <ArrowLeft className="h-5 w-5 mr-2" />
                   Back
                 </Button>
-                <Button 
-                  onClick={nextStep} 
+                <Button
+                  onClick={nextStep}
                   className="flex-1"
                   disabled={!childName || !ageRange || isSaving}
                 >
@@ -271,7 +269,7 @@ export default function OnboardingPage() {
               <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-light">
                 <Monitor className="h-8 w-8 text-primary" />
               </div>
-              
+
               <h2 className="text-2xl font-bold text-foreground text-center">
                 Connect {childName}'s PC
               </h2>
@@ -284,7 +282,7 @@ export default function OnboardingPage() {
                 <div className="mt-4 space-y-4">
                   {[
                     'Download the PlaySense companion app',
-                    'Install it on your child\'s PC (requires admin)',
+                    "Install it on your child's PC (requires admin)",
                     'The app runs quietly in the background',
                     'Only gaming activity data is collected',
                   ].map((stepText, i) => (
@@ -297,8 +295,8 @@ export default function OnboardingPage() {
                   ))}
                 </div>
 
-                <Button 
-                  className="mt-6 w-full gap-2" 
+                <Button
+                  className="mt-6 w-full gap-2"
                   variant="outline"
                   onClick={handleDownload}
                   disabled={isDownloading}
@@ -345,7 +343,7 @@ export default function OnboardingPage() {
               <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-light">
                 <Mail className="h-8 w-8 text-primary" />
               </div>
-              
+
               <h2 className="text-2xl font-bold text-foreground text-center">
                 Daily email reports
               </h2>
@@ -415,10 +413,8 @@ export default function OnboardingPage() {
               >
                 <Check className="h-10 w-10 text-health-green" />
               </motion.div>
-              
-              <h2 className="text-2xl font-bold text-foreground">
-                You're all set!
-              </h2>
+
+              <h2 className="text-2xl font-bold text-foreground">You're all set!</h2>
               <p className="mt-2 text-muted-foreground">
                 PlaySense is ready to help you understand {childName}'s gaming habits.
               </p>
@@ -427,7 +423,10 @@ export default function OnboardingPage() {
                 <h3 className="font-semibold text-foreground">What happens next?</h3>
                 <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                   <li>• Gaming activity will appear once the companion app syncs</li>
-                  <li>• Your first daily email will arrive tomorrow at {emailTimes.find(t => t.value === emailTime)?.label}</li>
+                  <li>
+                    • Your first daily email will arrive tomorrow at{' '}
+                    {emailTimes.find((t) => t.value === emailTime)?.label}
+                  </li>
                   <li>• Insights will develop as more data is collected</li>
                 </ul>
               </div>

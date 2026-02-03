@@ -66,13 +66,16 @@ export const useCheckAchievements = () => {
 
 // Helper to group achievements by category
 export const groupAchievementsByCategory = (achievements: Achievement[]) => {
-  return achievements.reduce((acc, achievement) => {
-    if (!acc[achievement.category]) {
-      acc[achievement.category] = [];
-    }
-    acc[achievement.category].push(achievement);
-    return acc;
-  }, {} as Record<string, Achievement[]>);
+  return achievements.reduce(
+    (acc, achievement) => {
+      if (!acc[achievement.category]) {
+        acc[achievement.category] = [];
+      }
+      acc[achievement.category].push(achievement);
+      return acc;
+    },
+    {} as Record<string, Achievement[]>
+  );
 };
 
 // Helper to calculate total points earned
@@ -86,5 +89,8 @@ export const calculateTotalPoints = (achievements: Achievement[]) => {
 export const getProgressPercentage = (achievement: Achievement) => {
   if (achievement.is_earned) return 100;
   if (achievement.requirement_value === 0) return 0;
-  return Math.min(100, Math.round((achievement.current_progress / achievement.requirement_value) * 100));
+  return Math.min(
+    100,
+    Math.round((achievement.current_progress / achievement.requirement_value) * 100)
+  );
 };

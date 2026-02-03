@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { 
-  useAchievements, 
-  groupAchievementsByCategory, 
+import {
+  useAchievements,
+  groupAchievementsByCategory,
   calculateTotalPoints,
   getProgressPercentage,
-  Achievement
+  Achievement,
 } from '@/hooks/useAchievements';
 import { Trophy, Star, Lock, ChevronRight, Sparkles } from 'lucide-react';
 
@@ -26,16 +26,22 @@ const categoryLabels: Record<string, { label: string; color: string }> = {
   milestone: { label: 'Milestones', color: 'text-yellow-500' },
 };
 
-function AchievementBadge({ achievement, compact = false }: { achievement: Achievement; compact?: boolean }) {
+function AchievementBadge({
+  achievement,
+  compact = false,
+}: {
+  achievement: Achievement;
+  compact?: boolean;
+}) {
   const progress = getProgressPercentage(achievement);
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       className={`relative rounded-xl border p-3 transition-all ${
-        achievement.is_earned 
-          ? 'border-primary/50 bg-primary/5 hover:bg-primary/10' 
+        achievement.is_earned
+          ? 'border-primary/50 bg-primary/5 hover:bg-primary/10'
           : 'border-border bg-muted/30 opacity-70 hover:opacity-100'
       }`}
     >
@@ -57,7 +63,9 @@ function AchievementBadge({ achievement, compact = false }: { achievement: Achie
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h4 className={`font-medium text-sm ${achievement.is_earned ? 'text-foreground' : 'text-muted-foreground'}`}>
+            <h4
+              className={`font-medium text-sm ${achievement.is_earned ? 'text-foreground' : 'text-muted-foreground'}`}
+            >
               {achievement.name}
             </h4>
             {achievement.times_earned > 1 && (
@@ -66,7 +74,7 @@ function AchievementBadge({ achievement, compact = false }: { achievement: Achie
               </span>
             )}
           </div>
-          
+
           {!compact && (
             <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
               {achievement.description}
@@ -77,7 +85,7 @@ function AchievementBadge({ achievement, compact = false }: { achievement: Achie
           {!achievement.is_earned && progress > 0 && (
             <div className="mt-2">
               <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                <div 
+                <div
                   className="h-full bg-primary/50 rounded-full transition-all duration-500"
                   style={{ width: `${progress}%` }}
                 />
@@ -91,9 +99,7 @@ function AchievementBadge({ achievement, compact = false }: { achievement: Achie
           {/* Points */}
           <div className="flex items-center gap-1 mt-1">
             <Sparkles className="h-3 w-3 text-yellow-500" />
-            <span className="text-xs font-medium text-yellow-600">
-              {achievement.points} pts
-            </span>
+            <span className="text-xs font-medium text-yellow-600">{achievement.points} pts</span>
             {achievement.is_earned && achievement.earned_at && (
               <span className="text-xs text-muted-foreground ml-2">
                 Earned {new Date(achievement.earned_at).toLocaleDateString()}
@@ -143,24 +149,27 @@ export function AchievementsCard({ childId, childName }: AchievementsCardProps) 
 
   const grouped = groupAchievementsByCategory(achievements);
   const totalPoints = calculateTotalPoints(achievements);
-  const earnedCount = achievements.filter(a => a.is_earned).length;
-  
+  const earnedCount = achievements.filter((a) => a.is_earned).length;
+
   // Get recently earned (last 7 days)
   const recentlyEarned = achievements
-    .filter(a => a.is_earned && a.earned_at)
-    .filter(a => new Date(a.earned_at!).getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000)
+    .filter((a) => a.is_earned && a.earned_at)
+    .filter((a) => new Date(a.earned_at!).getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000)
     .slice(0, 3);
 
   // Get close to earning (progress > 50%)
   const closeToEarning = achievements
-    .filter(a => !a.is_earned && getProgressPercentage(a) >= 50)
+    .filter((a) => !a.is_earned && getProgressPercentage(a) >= 50)
     .slice(0, 3);
 
-  const displayAchievements = selectedCategory 
+  const displayAchievements = selectedCategory
     ? grouped[selectedCategory] || []
-    : showAll 
-      ? achievements 
-      : [...recentlyEarned, ...closeToEarning.filter(a => !recentlyEarned.find(r => r.id === a.id))].slice(0, 6);
+    : showAll
+      ? achievements
+      : [
+          ...recentlyEarned,
+          ...closeToEarning.filter((a) => !recentlyEarned.find((r) => r.id === a.id)),
+        ].slice(0, 6);
 
   return (
     <Card>
@@ -208,9 +217,9 @@ export function AchievementsCard({ childId, childName }: AchievementsCardProps) 
         <div className="grid gap-3 sm:grid-cols-2">
           <AnimatePresence mode="popLayout">
             {displayAchievements.map((achievement) => (
-              <AchievementBadge 
-                key={achievement.id} 
-                achievement={achievement} 
+              <AchievementBadge
+                key={achievement.id}
+                achievement={achievement}
                 compact={!showAll && !selectedCategory}
               />
             ))}
@@ -219,24 +228,20 @@ export function AchievementsCard({ childId, childName }: AchievementsCardProps) 
 
         {/* Show More/Less */}
         {!selectedCategory && achievements.length > 6 && (
-          <Button
-            variant="ghost"
-            className="w-full"
-            onClick={() => setShowAll(!showAll)}
-          >
+          <Button variant="ghost" className="w-full" onClick={() => setShowAll(!showAll)}>
             {showAll ? 'Show Less' : `Show All ${achievements.length} Achievements`}
-            <ChevronRight className={`h-4 w-4 ml-1 transition-transform ${showAll ? 'rotate-90' : ''}`} />
+            <ChevronRight
+              className={`h-4 w-4 ml-1 transition-transform ${showAll ? 'rotate-90' : ''}`}
+            />
           </Button>
         )}
 
         {/* Encouragement */}
         {closeToEarning.length > 0 && !showAll && !selectedCategory && (
           <div className="rounded-lg bg-primary/5 border border-primary/20 p-3">
-            <p className="text-sm text-foreground font-medium">
-              Almost there!
-            </p>
+            <p className="text-sm text-foreground font-medium">Almost there!</p>
             <p className="text-xs text-muted-foreground mt-1">
-              {childName} is close to earning: {closeToEarning.map(a => a.name).join(', ')}
+              {childName} is close to earning: {closeToEarning.map((a) => a.name).join(', ')}
             </p>
           </div>
         )}
