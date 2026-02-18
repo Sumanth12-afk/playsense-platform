@@ -30,6 +30,7 @@ import {
   useActiveSession,
 } from '@/hooks/useGamingData';
 import { useConversationTips, transformTipsForCard } from '@/hooks/useConversationTips';
+import { LoadingScreen } from '@/components/ui/loading-screen';
 
 export default function DashboardPage() {
   const { data: children, isLoading: childrenLoading, error: childrenError } = useChildren();
@@ -190,11 +191,7 @@ export default function DashboardPage() {
   };
 
   if (childrenLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (!children || children.length === 0) {

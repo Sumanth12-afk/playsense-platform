@@ -33,7 +33,25 @@ function createMainWindow() {
     });
     // Load the app
     if (process.env.NODE_ENV === 'development') {
-        mainWindow.loadURL('http://localhost:5173');
+        const devUrl = 'http://localhost:5173';
+        let retryCount = 0;
+        const maxRetries = 15; // ~30 seconds total
+        const tryLoad = () => {
+            if (mainWindow && !mainWindow.isDestroyed()) {
+                mainWindow.loadURL(devUrl);
+            }
+        };
+        mainWindow.webContents.on('did-fail-load', (_event, _errorCode, errorDescription) => {
+            if (errorDescription?.includes('ERR_CONNECTION_REFUSED') &&
+                retryCount < maxRetries &&
+                mainWindow &&
+                !mainWindow.isDestroyed()) {
+                retryCount++;
+                logger_1.logger.warn(`Dev server not ready, retrying (${retryCount}/${maxRetries})...`);
+                setTimeout(tryLoad, 2000);
+            }
+        });
+        tryLoad();
         mainWindow.webContents.openDevTools();
     }
     else {

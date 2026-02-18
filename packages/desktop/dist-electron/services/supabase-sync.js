@@ -38,10 +38,17 @@ const database_1 = require("./database");
 const logger_1 = require("../utils/logger");
 const crypto_1 = require("crypto");
 const electron_1 = require("electron");
-const API_BASE_URL = 'https://ycwlwaolrzriydhkgrwr.supabase.co';
-const API_FUNCTIONS_URL = 'https://ycwlwaolrzriydhkgrwr.supabase.co/functions/v1';
+const API_BASE_URL = process.env.SUPABASE_URL || 'https://ycwlwaolrzriydhkgrwr.supabase.co';
+const API_FUNCTIONS_URL = `${API_BASE_URL}/functions/v1`;
 const API_ENDPOINT = `${API_FUNCTIONS_URL}/super-responder`;
-const SUPABASE_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inljd2x3YW9scnpyaXlkaGtncndyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NzY5NDc4OSwiZXhwIjoyMDgzMjcwNzg5fQ.rQlBQ1UAm-QKCOSUilyWZKi4HLO8HC5cnSdXvws8tCM';
+// Service role key MUST be set via environment variable - never hardcode!
+const getServiceRoleKey = () => {
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!key) {
+        logger_1.logger.error('SUPABASE_SERVICE_ROLE_KEY environment variable is not set!');
+    }
+    return key || '';
+};
 class SupabaseSyncService {
     constructor() {
         this.syncInterval = null;
@@ -77,7 +84,11 @@ class SupabaseSyncService {
         try {
             const { createClient } = await Promise.resolve().then(() => __importStar(require('@supabase/supabase-js')));
             const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || API_BASE_URL;
-            const key = process.env.SUPABASE_SERVICE_ROLE_KEY || SUPABASE_SERVICE_ROLE_KEY;
+            const key = getServiceRoleKey();
+            if (!key) {
+                logger_1.logger.error('Cannot pull cloud sessions: service role key not configured');
+                return { pulled: 0 };
+            }
             const supabase = createClient(url, key);
             const childIdTrimmed = (this.childId || '').trim();
             if (!childIdTrimmed) {
@@ -364,9 +375,10 @@ class SupabaseSyncService {
                 url: url,
             });
             // Add authorization header with Supabase service role key
+            const serviceKey = getServiceRoleKey();
             request.setHeader('Content-Type', 'application/json');
-            request.setHeader('Authorization', `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`);
-            request.setHeader('apikey', SUPABASE_SERVICE_ROLE_KEY);
+            request.setHeader('Authorization', `Bearer ${serviceKey}`);
+            request.setHeader('apikey', serviceKey);
             let responseData = '';
             request.on('response', (response) => {
                 logger_1.logger.info(`Response status: ${response.statusCode}`);
@@ -439,12 +451,13 @@ class SupabaseSyncService {
         }
         try {
             // Test connection by sending a heartbeat with the child ID
+            const serviceKey = getServiceRoleKey();
             const response = await fetch(`${API_ENDPOINT}?child_id=${encodeURIComponent(testChildId)}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
-                    'apikey': SUPABASE_SERVICE_ROLE_KEY
+                    'Authorization': `Bearer ${serviceKey}`,
+                    'apikey': serviceKey
                 }
             });
             if (!response.ok) {

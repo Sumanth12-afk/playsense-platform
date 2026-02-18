@@ -6,8 +6,8 @@ const database_1 = require("./database");
 const logger_1 = require("../utils/logger");
 class GamesSyncService {
     constructor() {
-        this.apiUrl = 'https://ulhgpivzpnsjgggejsre.supabase.co';
-        this.apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsaGdwaXZ6cG5zamdnZ2Vqc3JlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU0NDE1MjUsImV4cCI6MjA1MTAxNzUyNX0.xU8FEKiyCYATbwjxsRAUZ39ojcqJpLOb8P0B8QzXDPQ';
+        this.apiUrl = process.env.GAMES_DB_URL || process.env.SUPABASE_URL || 'https://ycwlwaolrzriydhkgrwr.supabase.co';
+        this.apiKey = process.env.GAMES_DB_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
         this.syncInterval = null;
     }
     /**
@@ -43,10 +43,8 @@ class GamesSyncService {
                                 let updatedCount = 0;
                                 for (const game of games) {
                                     try {
-                                        // Ensure executables is an array
-                                        const executables = Array.isArray(game.executables)
-                                            ? game.executables
-                                            : JSON.parse(game.executables);
+                                        // Supabase has process_name (single); local schema uses executables (array)
+                                        const executables = [game.process_name || ''];
                                         upsert.run(game.id, game.name, JSON.stringify(executables), game.category, game.icon_url || null);
                                         updatedCount++;
                                     }

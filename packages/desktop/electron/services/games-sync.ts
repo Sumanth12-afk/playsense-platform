@@ -3,10 +3,11 @@ import { net } from 'electron';
 import { getDatabase } from './database';
 import { logger } from '../utils/logger';
 
+// Supabase games table uses process_name (single); local schema uses executables (array)
 interface SupabaseGame {
   id: string;
   name: string;
-  executables: string[];
+  process_name: string;
   category: 'competitive' | 'creative' | 'casual' | 'social' | 'unknown';
   icon_url?: string;
 }
@@ -56,10 +57,8 @@ class GamesSyncService {
                 let updatedCount = 0;
                 for (const game of games) {
                   try {
-                    // Ensure executables is an array
-                    const executables = Array.isArray(game.executables)
-                      ? game.executables
-                      : JSON.parse(game.executables as any);
+                    // Supabase has process_name (single); local schema uses executables (array)
+                    const executables = [game.process_name || ''];
 
                     upsert.run(
                       game.id,
